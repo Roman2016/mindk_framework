@@ -9,8 +9,9 @@
 class Loader
 {
     private static $instance = null;
-    private static $NameSpace;
-    private static $someNamePath;
+    private static $someNamePath = array();
+    private static $NameSpace = null;
+    private static $Path = null;
 
     public static function getInstance()
     {
@@ -35,24 +36,44 @@ class Loader
     public static function addNamespacePath($namespace, $path)
     {
         self::$NameSpace = $namespace;
-        self::$someNamePath = $path;
+        self::$Path = $path;
+
+        for ($i = 0; $i < count(self::$someNamePath); $i++)
+        {
+            if (key(self::$someNamePath) == $namespace)
+            {
+                if (self::$someNamePath[$namespace] == $path)
+                {
+                    return;
+                    //return self::$someNamePath[$namespace];
+                }
+            }
+        }
+        self::$someNamePath[$namespace] = $path;
+        //return self::$someNamePath[$namespace];
+    }
+
+    public static function returnNamespacePath()
+    {
+        print_r (self::$someNamePath);
+        return self::$NameSpace;
     }
 
     public static function LoadFile($classname)
     {
         $pathclass = str_replace('Framework', '', $classname);
         $pathFile = str_replace('\\', '/', $pathclass);
-        $path = __DIR__.$pathFile.'.php';
-        if (file_exists($path))
+        $pathFull = __DIR__.$pathFile.'.php';
+        if (file_exists($pathFull))
         {
-            include_once($path);
+            include_once($pathFull);
         }
         $pathclass = str_replace(self::$NameSpace, '', $classname);
         $pathFile = str_replace('\\', '/', $pathclass);
-        $path =self::$someNamePath.'/'.$pathFile.'.php';
-        if (file_exists($path))
+        $pathFull =self::$Path.'/'.$pathFile.'.php';
+        if (file_exists($pathFull))
         {
-            include_once($path);
+            include_once($pathFull);
         }
     }
 }

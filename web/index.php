@@ -11,4 +11,7 @@ $app->run();
 
 $app2 = new \Framework\DI\Service; // проверка автоподгрузчика
 
+Loader::returnNamespacePath();
+
 $app3 = new Blog\Controller\PostController;
+
