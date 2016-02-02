@@ -2,13 +2,13 @@
 /**
  * Created by PhpStorm.
  * User: Users CS
- * Date: 31.01.2016
- * Time: 18:47
+ * Date: 02.02.2016
+ * Time: 16:05
  */
 
-namespace Framework\DI;
+namespace Framework\Controller;
 
-class Service
+class Controller
 {
     public function __construct()
     {

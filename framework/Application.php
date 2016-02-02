@@ -12,11 +12,10 @@ class Application
     public function __construct($path)
     {
         //override protection
-
     }
 
     public function run()
     {
-        echo "Файл загружен";
+
     }
 }

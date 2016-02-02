@@ -10,8 +10,6 @@ class Loader
 {
     private static $instance = null;
     private static $someNamePath = array();
-    private static $NameSpace = null;
-    private static $Path = null;
 
     public static function getInstance()
     {
@@ -35,28 +33,13 @@ class Loader
 
     public static function addNamespacePath($namespace, $path)
     {
-        self::$NameSpace = $namespace;
-        self::$Path = $path;
-
-        for ($i = 0; $i < count(self::$someNamePath); $i++)
-        {
-            if (key(self::$someNamePath) == $namespace)
-            {
-                if (self::$someNamePath[$namespace] == $path)
-                {
-                    return;
-                    //return self::$someNamePath[$namespace];
-                }
-            }
-        }
         self::$someNamePath[$namespace] = $path;
-        //return self::$someNamePath[$namespace];
     }
 
     public static function returnNamespacePath()
     {
-        print_r (self::$someNamePath);
-        return self::$NameSpace;
+        //print_r (self::$someNamePath);
+        return self::$someNamePath;
     }
 
     public static function LoadFile($classname)
@@ -68,12 +51,20 @@ class Loader
         {
             include_once($pathFull);
         }
-        $pathclass = str_replace(self::$NameSpace, '', $classname);
-        $pathFile = str_replace('\\', '/', $pathclass);
-        $pathFull =self::$Path.'/'.$pathFile.'.php';
-        if (file_exists($pathFull))
+        foreach(self::$someNamePath as $namespace => $path)
         {
-            include_once($pathFull);
+            $regexp = '~^'.$namespace.'.*~';
+            if(preg_match($regexp, $classname))
+            {
+                $pathclass = str_replace($namespace, '', $classname);
+                $pathFile = str_replace('\\', '/', $pathclass);
+                $pathFull = $path.'/'.$pathFile.'.php';
+                if (file_exists($pathFull))
+                {
+                    include_once($pathFull);
+                }
+                break;
+            }
         }
     }
 }
