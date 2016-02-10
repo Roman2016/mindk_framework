@@ -18,6 +18,8 @@ class Router
 {
 
     /**
+     * Хранилище для массива routes
+     *
      * @var array
      */
     protected static $map = array ();
@@ -49,7 +51,8 @@ class Router
         $string = null; // Additional condition in the choice of regular expression
         $url = str_replace('/web', '', $url); //если проблемы с редиректом
 
-        foreach(self::$map as $route){
+        foreach(self::$map as $route)
+        {
             $pattern = $this -> preparePattern($route, $string = false);
             if(preg_match($pattern, $url, $params))
             {
@@ -70,10 +73,27 @@ class Router
      *
      * @param $route_name
      * @param array $params
+     * @return null|string
      */
     public function buildUrl($route_name, $params = array())
     {
+        $url = null;
 
+        foreach(self::$map as $route => $options)
+        {
+            if ($route == $route_name)
+            {
+                $url = $options['pattern'];
+                if (!empty($params))
+                {
+                    $pattern = $this -> preparePattern($options, $string = false);
+                    preg_match($pattern, str_replace(array('{id}'), $params['id'], $url), $params);
+                    $url = $params[0];
+                }
+                break;
+            }
+        }
+        return $url;
     }
 
     /**

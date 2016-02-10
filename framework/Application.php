@@ -42,7 +42,7 @@ class Application
     {
         $router = new Router(include('../app/config/routes.php'));
 
-        $route = $router -> parseUrl($_SERVER['REQUEST_URI']);
+        $route = $router -> parseUrl(trim(strip_tags($_SERVER['REQUEST_URI'])));
 
         if(!empty($route))
         {
@@ -53,6 +53,10 @@ class Application
 
         }
 
+        $buildUrl = $router -> buildUrl('profile', $params = array("id" => 1));
+
+        echo '<pre>';
+        print_r($buildUrl);
         echo '<pre>';
         print_r($route);
     }
