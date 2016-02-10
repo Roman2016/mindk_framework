@@ -8,6 +8,10 @@
 
 namespace Framework\DI;
 
+/**
+ * Class Service
+ * @package Framework\DI
+ */
 class Service
 {
     public function __construct()
