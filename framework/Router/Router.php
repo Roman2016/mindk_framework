@@ -40,8 +40,7 @@ class Router
     /**
      * Формирует пути к файлу контроллера используя url
      * Выбирает соответствующий action
-     *
-     *
+     *     *
      * @param $url
      * @return $route_found
      */
@@ -79,20 +78,15 @@ class Router
     {
         $url = null;
 
-        foreach(self::$map as $route => $options)
-        {
-            if ($route == $route_name)
-            {
-                $url = $options['pattern'];
-                if (!empty($params))
-                {
-                    $pattern = $this -> preparePattern($options, $string = false);
-                    preg_match($pattern, str_replace(array('{id}'), $params['id'], $url), $params);
-                    $url = $params[0];
-                }
-                break;
+        $url = array_key_exists($route_name, self::$map) ? self::$map[$route_name]['pattern'] : '/';
+        if(!empty($params)){
+            foreach($params as $key => $value){
+
+                $url = str_replace('{'.$key.'}', $value, $url);
             }
         }
+        // Подчищаем оставшиеся переменные, которые не были заменены
+        $url = preg_replace('~\{[\w\d_]*\}~','',$url);
         return $url;
     }
 
@@ -104,7 +98,10 @@ class Router
      */
     private function preparePattern($route, $string = false)
     {
+        $pattern = null;
+
         if ($route['_requirements'] && $string == false)
+
         {
             $pattern = preg_replace('~\{[\w\d_]+\}~Ui', '('.$route['_requirements']['id'].')', $route['pattern']);
         }
@@ -113,6 +110,10 @@ class Router
             $pattern = preg_replace('~\{[\w\d_]+\}~Ui','([\w\d_]+)', $route['pattern']);
         }
         $pattern = '~^'.$pattern.'$~';
+        //echo '<pre>';
+        //print_r ($pattern);
         return $pattern;
+
+        // @TODO: Remove before final release
     }
 }

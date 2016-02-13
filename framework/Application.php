@@ -53,11 +53,12 @@ class Application
 
         }
 
-        $buildUrl = $router -> buildUrl('profile', $params = array("id" => 1));
+        $buildUrl = $router -> buildUrl('show_post', $params = array("id" => 10));
 
         echo '<pre>';
         print_r($buildUrl);
-        echo '<pre>';
-        print_r($route);
+        //echo '<pre>';
+        //print_r($route);
+
     }
 }
