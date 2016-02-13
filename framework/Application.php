@@ -55,10 +55,10 @@ class Application
 
         $buildUrl = $router -> buildUrl('show_post', $params = array("id" => 10));
 
-        echo '<pre>';
-        print_r($buildUrl);
         //echo '<pre>';
-        //print_r($route);
+        //print_r($buildUrl);
+        echo '<pre>';
+        print_r($route);
 
     }
 }

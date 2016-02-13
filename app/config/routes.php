@@ -51,11 +51,12 @@ return array(
         'security'   => array('ROLE_USER'),
     ),
     'show_post'      => array(
-        'pattern'       => '/posts/{id}',
+        'pattern'       => '/posts/{id}/{param}',
         'controller'    => 'Blog\\Controller\\PostController',
         'action'        => 'show',
         '_requirements' => array(
-            'id' => '\d+'
+            'id' => '\d+',
+            'param' => '\d+'
         )
     ),
     'edit_post'      => array(

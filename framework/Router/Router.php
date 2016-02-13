@@ -48,11 +48,12 @@ class Router
     {
         $route_found = null;
         $string = null; // Additional condition in the choice of regular expression
-        $url = str_replace('/web', '', $url); //если проблемы с редиректом
+        $url = str_replace('/web', '', $url); // если проблемы с редиректом
 
         foreach(self::$map as $route)
         {
             $pattern = $this -> preparePattern($route, $string = false);
+            //echo $pattern;
             if(preg_match($pattern, $url, $params))
             {
                 $pattern = $this -> preparePattern($route, $string = true);
@@ -79,9 +80,10 @@ class Router
         $url = null;
 
         $url = array_key_exists($route_name, self::$map) ? self::$map[$route_name]['pattern'] : '/';
-        if(!empty($params)){
-            foreach($params as $key => $value){
-
+        if(!empty($params))
+        {
+            foreach($params as $key => $value)
+            {
                 $url = str_replace('{'.$key.'}', $value, $url);
             }
         }
@@ -101,9 +103,13 @@ class Router
         $pattern = null;
 
         if ($route['_requirements'] && $string == false)
-
         {
-            $pattern = preg_replace('~\{[\w\d_]+\}~Ui', '('.$route['_requirements']['id'].')', $route['pattern']);
+            foreach($route['_requirements'] as $key => $value)
+            {
+                $pattern = preg_replace('~\{'.$key.'\}~Ui',
+                           '('.$route['_requirements'][$key].')', $route['pattern']);
+                $route['pattern'] = $pattern;
+            }
         }
         else
         {
@@ -113,7 +119,5 @@ class Router
         //echo '<pre>';
         //print_r ($pattern);
         return $pattern;
-
-        // @TODO: Remove before final release
     }
 }
