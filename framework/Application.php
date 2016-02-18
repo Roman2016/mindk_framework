@@ -13,9 +13,12 @@ namespace Framework;
 
 use Framework\Router\Router;
 use Framework\Response\Response;
+use Framework\Controller\Controller;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Exception\BadResponseTypeException;
 use Framework\Exception\AuthRequredException;
+use Framework\Exception\BadControllerTypeException;
+use Framework\Exception\InvalidArgumentException;
 
 /**
  * Class Application
@@ -55,26 +58,35 @@ class Application
             if(!empty($route))
             {
                 $controllerReflection = new \ReflectionClass($route['controller']);
+                //echo '<pre>';
+                //print_r($controllerReflection);
                 $action = $route['action'] . 'Action';
                 if($controllerReflection->hasMethod($action))
                 {
                     $controller = $controllerReflection->newInstance();
-                    //echo '<pre>';
-                    //print_r($controller);
-                    $actionReflection = $controllerReflection->getMethod($action);
-                    //echo '<pre>';
-                    //print_r($actionReflection);
-                    $response = $actionReflection->invokeArgs($controller, $route['params']);
-                    //echo '<pre>';
-                    //print_r($response);
-                    if($response instanceof Response)
+                    if($controller instanceof Controller)
                     {
-                        //$response->send();
-                        // ...
+                        //echo '<pre>';
+                        //print_r($controller);
+                        $actionReflection = $controllerReflection->getMethod($action);
+                        //echo '<pre>';
+                        //print_r($actionReflection);
+                        $response = $actionReflection->invokeArgs($controller, $route['params']);
+                        //echo '<pre>';
+                        //print_r($response);
+                        if ($response instanceof Response)
+                        {
+                            $response->send();
+                            // ...
+                        }
+                        else
+                        {
+                            throw new BadResponseTypeException('Missing type of response');
+                        }
                     }
                     else
                     {
-                        throw new BadResponseTypeException('Missing type of response');
+                        throw new BadControllerTypeException('Missing type of controller');
                     }
                 }
             }
@@ -90,7 +102,11 @@ class Application
         catch(AuthRequredException $e)
         {
             // Reroute to login page
-            //$response = new RedirectResponse(...);
+            // $response = new RedirectResponse(...);
+        }
+        catch(InvalidArgumentException $e)
+        {
+            echo $e->getMessage();
         }
         catch(BadResponseTypeException $e)
         {
@@ -102,7 +118,7 @@ class Application
             echo $e->getMessage();
         }
 
-        $response->send();
+        //$response->send();
 
         $buildUrl = $router -> buildUrl('show_post', $params = array("id" => 10));
 

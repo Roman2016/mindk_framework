@@ -11,79 +11,53 @@ namespace Framework\Response;
 class JsonResponse extends \Framework\Response\Response
 {
     /**
-     * @var array
-     */
-    protected $headers = array();
-
-    /**
-     * @var int
-     */
-    public $code = 200;
-
-    /**
+     * Передаваемый контент
+     *
      * @var string
      */
     public $content = array();
 
     /**
-     * @var string
-     */
-    public $type = 'text/html';
-
-    /**
-     * @var array
-     */
-    private static $msgs = array(
-        200 => 'Ok',
-        404 => 'Not found'
-    );
-
-    /**
-     * Response constructor.
-     * @param string $content
+     * JsonResponse constructor.
+     * @param array $content
      * @param string $type
      * @param int $code
      */
-    public function __construct($content = array())
+    public function __construct($content = array(), $type = 'text/html', $code = 200)
     {
-        //$this->code = $code;
-        $this->content = $content;
-        //$this->type = $type;
-        $this->setHeader('Content-Type', $this->type);
+        parent::__construct($content, $type, $code);
     }
 
     /**
-     *
+     * Функция для отправки информации Headers и Body
      */
     public function send()
     {
-        $this->sendHeaders();
-        $this->sendBody();
+        parent::send();
     }
 
 
     /**
+     * Формирование массива для значений Headers
+     *
      * @param $name
      * @param $value
      */
     public function setHeader($name, $value)
     {
-        $this->headers[$name] = $value;
+        parent::setHeader($name, $value);
     }
 
     /**
-     *
+     * Функция для отправки (отображения) параметров Headers
      */
     public function sendHeaders()
     {
-        header($_SERVER['SERVER_PROTOCOL'].' '.$this->code.' '.self::$msgs[$this->code]);
-        foreach($this->headers as $key => $value){
-            header(sprintf("%s: %s", $key, $value));
-        }
+        parent::sendHeaders();
     }
 
     /**
-     *
+     * Функция для отправки (отображения) параметров Body
      */
     public function sendBody(){
         echo json_encode($this->content);
