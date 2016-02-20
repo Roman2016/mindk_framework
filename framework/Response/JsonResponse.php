@@ -29,34 +29,6 @@ class JsonResponse extends \Framework\Response\Response
     }
 
     /**
-     * Функция для отправки информации Headers и Body
-     */
-    public function send()
-    {
-        parent::send();
-    }
-
-
-    /**
-     * Формирование массива для значений Headers
-     *
-     * @param $name
-     * @param $value
-     */
-    public function setHeader($name, $value)
-    {
-        parent::setHeader($name, $value);
-    }
-
-    /**
-     * Функция для отправки (отображения) параметров Headers
-     */
-    public function sendHeaders()
-    {
-        parent::sendHeaders();
-    }
-
-    /**
      * Функция для отправки (отображения) параметров Body
      */
     public function sendBody(){

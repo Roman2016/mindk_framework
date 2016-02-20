@@ -25,6 +25,8 @@ class ResponseRedirect extends \Framework\Response\Response
      * @param array $content
      * @param string $type
      * @param int $code
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct($url, $content = array(), $type = 'text/html', $code = 302)
     {
@@ -37,51 +39,15 @@ class ResponseRedirect extends \Framework\Response\Response
         $this->setTargetUrl($url);
     }
 
-
+    /**
+     *
+     *
+     * @param $url
+     */
     public function setTargetUrl($url)
     {
         $this->targetUrl = $url;
 
         $this->setHeader('Location', $url);
-    }
-
-
-    public function generateRoute($call_route)
-    {
-
-    }
-    /**
-     * Функция для отправки информации Headers и Body
-     */
-    public function send()
-    {
-        parent::send();
-    }
-
-
-    /**
-     * Формирование массива для значений Headers
-     *
-     * @param $name
-     * @param $value
-     */
-    public function setHeader($name, $value)
-    {
-        parent::setHeader($name, $value);
-    }
-
-    /**
-     * Функция для отправки (отображения) параметров Headers
-     */
-    public function sendHeaders()
-    {
-        parent::sendHeaders();
-    }
-
-    /**
-     * Функция для отправки (отображения) параметров Body
-     */
-    public function sendBody(){
-        parent::sendBody();
     }
 }

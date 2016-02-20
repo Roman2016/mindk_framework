@@ -108,7 +108,8 @@ class Response
     /**
      * Функция для отправки (отображения) параметров Body
      */
-    public function sendBody(){
+    public function sendBody()
+    {
         echo $this->content;
     }
 }

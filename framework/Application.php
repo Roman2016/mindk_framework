@@ -76,7 +76,8 @@ class Application
                         //print_r($response);
                         if ($response instanceof Response)
                         {
-                            $response->send();
+                            //header( 'Location: /web/', true);
+                            //$response->send();
                             // ...
                         }
                         else
@@ -120,10 +121,11 @@ class Application
 
         //$response->send();
 
+
         $buildUrl = $router -> buildUrl('show_post', $params = array("id" => 10));
 
-        //echo '<pre>';
-        //print_r($buildUrl);
+        echo '<pre>';
+        print_r($buildUrl);
         //echo '<pre>';
         //print_r($route);
 
