@@ -16,7 +16,6 @@ use Framework\Response\ResponseRedirect;
 
 class SecurityController extends Controller
 {
-
     public function loginAction()
     {
         if (Service::get('security')->isAuthenticated()) {

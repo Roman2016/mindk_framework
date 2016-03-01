@@ -13,6 +13,7 @@ namespace Framework;
 
 use Framework\Router\Router;
 use Framework\Response\Response;
+//use Framework\Response\ResponseRedirect;
 use Framework\Controller\Controller;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Exception\BadResponseTypeException;
@@ -44,6 +45,11 @@ class Application
     /**
      * Создает класс роутера и вызывает функцию, которая
      * обрабатывает входящий url адрес
+     *
+     * Проверяет, используя рефлексию, наличие нужного класса
+     * контроллера и методов в нем
+     *
+     * Создает соответствующий класс Response
      */
     public function run()
     {
@@ -66,6 +72,7 @@ class Application
                     $controller = $controllerReflection->newInstance();
                     if($controller instanceof Controller)
                     {
+                        \Loader::get_path_views();
                         //echo '<pre>';
                         //print_r($controller);
                         $actionReflection = $controllerReflection->getMethod($action);
@@ -76,9 +83,13 @@ class Application
                         //print_r($response);
                         if ($response instanceof Response)
                         {
+                            //\Loader::get_path_views();
                             //header( 'Location: /web/', true);
                             //$response->send();
                             // ...
+                            //echo '<script>location.replace("http://svyatoslav.biz/misc/psr_translation/");</script>';
+                            //exit;
+                            //include('..src/Blog/views/500.html.php');
                         }
                         else
                         {
@@ -99,11 +110,13 @@ class Application
         catch(HttpNotFoundException $e)
         {
             // Render 404 or just show msg
+            echo $e->getMessage();
         }
         catch(AuthRequredException $e)
         {
             // Reroute to login page
-            // $response = new RedirectResponse(...);
+            $response = new ResponseRedirect("/login");
+            $response->sendHeaders();
         }
         catch(InvalidArgumentException $e)
         {
@@ -117,17 +130,20 @@ class Application
         {
             // Do 500 layout...
             echo $e->getMessage();
+            //echo '<script>location.replace("_URL_");</script>'; exit;
         }
 
-        //$response->send();
+        $response->send();
 
 
         $buildUrl = $router -> buildUrl('show_post', $params = array("id" => 10));
 
-        echo '<pre>';
-        print_r($buildUrl);
+        //echo '<pre>';
+        //print_r($buildUrl);
+        //$response = new ResponseRedirect("/login");
+        //echo '<pre>';
+        //print_r($response);
         //echo '<pre>';
         //print_r($route);
-
     }
 }

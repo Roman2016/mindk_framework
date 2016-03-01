@@ -8,14 +8,30 @@
 
 namespace Framework\DI;
 
+use Framework\Application;
+
 /**
  * Class Service
  * @package Framework\DI
  */
 class Service
 {
+    /**
+     * Service constructor.
+     */
     public function __construct()
     {
 
+    }
+
+    /**
+     * Return appropriate config parameter
+     *
+     * @param $param
+     * @return mixed
+     */
+    public static function get($param)
+    {
+        return Application::$config_map["$param"];
     }
 }

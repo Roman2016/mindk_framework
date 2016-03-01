@@ -40,7 +40,7 @@ class ResponseRedirect extends \Framework\Response\Response
     }
 
     /**
-     *
+     * Записывает url в массив Header
      *
      * @param $url
      */
@@ -48,6 +48,6 @@ class ResponseRedirect extends \Framework\Response\Response
     {
         $this->targetUrl = $url;
 
-        $this->setHeader('Location', $url);
+        $this->setHeader('Location', '/web'.$url);
     }
 }

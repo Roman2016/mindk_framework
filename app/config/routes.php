@@ -66,6 +66,5 @@ return array(
             'id'      => '\d+',
             '_method' => 'POST'
         )
-
     )
 );
