@@ -13,7 +13,7 @@ namespace Framework;
 
 use Framework\Router\Router;
 use Framework\Response\Response;
-//use Framework\Response\ResponseRedirect;
+use Framework\Response\ResponseRedirect;
 use Framework\Controller\Controller;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Exception\BadResponseTypeException;
@@ -64,32 +64,17 @@ class Application
             if(!empty($route))
             {
                 $controllerReflection = new \ReflectionClass($route['controller']);
-                //echo '<pre>';
-                //print_r($controllerReflection);
                 $action = $route['action'] . 'Action';
                 if($controllerReflection->hasMethod($action))
                 {
                     $controller = $controllerReflection->newInstance();
                     if($controller instanceof Controller)
                     {
-                        \Loader::get_path_views();
-                        //echo '<pre>';
-                        //print_r($controller);
                         $actionReflection = $controllerReflection->getMethod($action);
-                        //echo '<pre>';
-                        //print_r($actionReflection);
                         $response = $actionReflection->invokeArgs($controller, $route['params']);
-                        //echo '<pre>';
-                        //print_r($response);
                         if ($response instanceof Response)
                         {
-                            //\Loader::get_path_views();
-                            //header( 'Location: /web/', true);
-                            //$response->send();
                             // ...
-                            //echo '<script>location.replace("http://svyatoslav.biz/misc/psr_translation/");</script>';
-                            //exit;
-                            //include('..src/Blog/views/500.html.php');
                         }
                         else
                         {
@@ -134,16 +119,5 @@ class Application
         }
 
         $response->send();
-
-
-        $buildUrl = $router -> buildUrl('show_post', $params = array("id" => 10));
-
-        //echo '<pre>';
-        //print_r($buildUrl);
-        //$response = new ResponseRedirect("/login");
-        //echo '<pre>';
-        //print_r($response);
-        //echo '<pre>';
-        //print_r($route);
     }
 }

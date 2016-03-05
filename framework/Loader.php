@@ -144,9 +144,6 @@ class Loader
                 {
                     self::$ControllerName = $pathFile;
                 }
-                //echo '<pre>';
-                //echo "$pathFile\n";
-                //echo '</pre>';
                 $pathFull = $path.'/'.$pathFile.'.php';
                 if (file_exists($pathFull))
                 {

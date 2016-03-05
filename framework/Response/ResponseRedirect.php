@@ -22,13 +22,13 @@ class ResponseRedirect extends \Framework\Response\Response
     /**
      * ResponseRedirect constructor.
      * @param string $url
-     * @param array $content
+     * @param string $content
      * @param string $type
      * @param int $code
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($url, $content = array(), $type = 'text/html', $code = 302)
+    public function __construct($url, $content = '', $type = 'text/html', $code = 302)
     {
         if (empty($url)) {
             throw new InvalidArgumentException('Cannot redirect to an empty URL.');

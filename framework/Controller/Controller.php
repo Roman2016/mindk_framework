@@ -13,6 +13,7 @@ use Framework\Response\Response;
 use Framework\Renderer\Renderer;
 use Framework\Response\ResponseRedirect;
 use Framework\DI\Service;
+use Framework\Exception\InvalidArgumentException;
 
 /**
  * Class Controller
@@ -42,21 +43,45 @@ abstract class Controller
      * @param $url
      * @return ResponseRedirect
      */
-    public function redirect($url)
+    public function redirect($url, $content = false)
     {
-        return new ResponseRedirect($url);
+            return new ResponseRedirect($url, $content = false);
     }
 
     /**
      * Generate a full URL for a given key parameter
      *
      * @param $key
-     * @return null|string|void URL
+     * @return null|string|void
+     * @throws InvalidArgumentException
      */
     public function generateRoute($key)
     {
-        $router = new Router();
-        $url = $router -> buildUrl($key);
-        return $url;
+        if(!empty($key))
+        {
+            $router = new Router();
+            $url = $router -> buildUrl($key);
+            return $url;
+        }
+        else
+        {
+            throw new InvalidArgumentException('Cannot generate url for empty key.');
+        }
+    }
+
+    public function getRequest()
+    {
+        $request = null;
+        return $this;
+    }
+
+    public function isPost()
+    {
+
+    }
+
+    public function post($param)
+    {
+
     }
 }
