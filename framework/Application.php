@@ -12,6 +12,14 @@
 namespace Framework;
 
 use Framework\Router\Router;
+use Framework\Response\Response;
+use Framework\Response\ResponseRedirect;
+use Framework\Controller\Controller;
+use Framework\Exception\HttpNotFoundException;
+use Framework\Exception\BadResponseTypeException;
+use Framework\Exception\AuthRequredException;
+use Framework\Exception\BadControllerTypeException;
+use Framework\Exception\InvalidArgumentException;
 
 /**
  * Class Application
@@ -37,28 +45,79 @@ class Application
     /**
      * Создает класс роутера и вызывает функцию, которая
      * обрабатывает входящий url адрес
+     *
+     * Проверяет, используя рефлексию, наличие нужного класса
+     * контроллера и методов в нем
+     *
+     * Создает соответствующий класс Response
      */
     public function run()
     {
+        $response = null;
+
         $router = new Router(include('../app/config/routes.php'));
 
         $route = $router -> parseUrl(trim(strip_tags($_SERVER['REQUEST_URI'])));
 
-        if(!empty($route))
+        try
         {
-
+            if(!empty($route))
+            {
+                $controllerReflection = new \ReflectionClass($route['controller']);
+                $action = $route['action'] . 'Action';
+                if($controllerReflection->hasMethod($action))
+                {
+                    $controller = $controllerReflection->newInstance();
+                    if($controller instanceof Controller)
+                    {
+                        $actionReflection = $controllerReflection->getMethod($action);
+                        $response = $actionReflection->invokeArgs($controller, $route['params']);
+                        if ($response instanceof Response)
+                        {
+                            // ...
+                        }
+                        else
+                        {
+                            throw new BadResponseTypeException('Missing type of response');
+                        }
+                    }
+                    else
+                    {
+                        throw new BadControllerTypeException('Missing type of controller');
+                    }
+                }
+            }
+            else
+            {
+                throw new HttpNotFoundException('Route not found');
+            }
         }
-        else
+        catch(HttpNotFoundException $e)
         {
-
+            // Render 404 or just show msg
+            echo $e->getMessage();
+        }
+        catch(AuthRequredException $e)
+        {
+            // Reroute to login page
+            $response = new ResponseRedirect("/login");
+            $response->sendHeaders();
+        }
+        catch(InvalidArgumentException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch(BadResponseTypeException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch(\Exception $e)
+        {
+            // Do 500 layout...
+            echo $e->getMessage();
+            //echo '<script>location.replace("_URL_");</script>'; exit;
         }
 
-        $buildUrl = $router -> buildUrl('show_post', $params = array("id" => 10));
-
-        //echo '<pre>';
-        //print_r($buildUrl);
-        echo '<pre>';
-        print_r($route);
-
+        $response->send();
     }
 }

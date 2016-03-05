@@ -8,13 +8,53 @@
 
 namespace Framework\DI;
 
+use Framework\Application;
+
 /**
  * Class Service
  * @package Framework\DI
  */
 class Service
 {
+    /**
+     * @var
+     */
+    public $returnUrl;
+
+    /**
+     * Service constructor.
+     */
     public function __construct()
+    {
+
+    }
+
+    /**
+     * Return appropriate config parameter
+     *
+     * @param $param
+     * @return mixed
+     */
+    public static function get($param)
+    {
+        if($param === 'config')
+        {
+            return new self();
+        }
+        return Application::$config_map["$param"];
+    }
+
+    public function isAuthenticated()
+    {
+
+    }
+
+    public function setUser($user)
+    {
+
+    }
+
+    public function clear()
     {
 
     }

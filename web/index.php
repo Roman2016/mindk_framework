@@ -1,4 +1,3 @@
-<h2>index file</h2>
 <?php
 
 require_once(__DIR__.'/../framework/Loader.php');

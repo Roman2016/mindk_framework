@@ -53,7 +53,6 @@ class Router
         foreach(self::$map as $route)
         {
             $pattern = $this -> preparePattern($route, $string = false);
-            //echo $pattern;
             if(preg_match($pattern, $url, $params))
             {
                 $pattern = $this -> preparePattern($route, $string = true);
@@ -79,7 +78,7 @@ class Router
     {
         $url = null;
 
-        $url = array_key_exists($route_name, self::$map) ? self::$map[$route_name]['pattern'] : '/';
+        $url = array_key_exists($route_name, self::$map) ? '/web'.self::$map[$route_name]['pattern'] : '/web/';
         if(!empty($params))
         {
             foreach($params as $key => $value)

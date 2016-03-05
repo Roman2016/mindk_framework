@@ -29,6 +29,20 @@ class Loader
     private static $someNamePath = array();
 
     /**
+     * Хранит пространсто имен
+     *
+     * @var null
+     */
+    private static $NameSpace = null;
+
+    /**
+     * Хранит полное имя контроллера
+     *
+     * @var null
+     */
+    private static $ControllerName = null;
+
+    /**
      * Реализовывает паттерн singleton
      * существует только один обьект класса Loader
      *
@@ -72,6 +86,7 @@ class Loader
     public static function addNamespacePath($namespace, $path)
     {
         self::$someNamePath[$namespace] = $path;
+        self::$NameSpace = $namespace;
     }
 
     /**
@@ -83,6 +98,19 @@ class Loader
     {
         //print_r (self::$someNamePath);
         return self::$someNamePath;
+    }
+
+    /**
+     * Формирует полный путь к файлам html
+     *
+     * @return string
+     */
+    public static function get_path_views()
+    {
+        $folder_path = self::$someNamePath[self::$NameSpace];
+        $view_name = str_replace('Controller', '', self::$ControllerName);
+        $fullPath = $folder_path.'/views'.$view_name.'/';
+        return $fullPath;
     }
 
     /**
@@ -110,6 +138,12 @@ class Loader
             {
                 $pathclass = str_replace($namespace, '', $classname);
                 $pathFile = str_replace('\\', '/', $pathclass);
+                // Controller class name for path to views
+                $regexp = '~^Controller.*~';
+                if(preg_match($regexp, $pathFile))
+                {
+                    self::$ControllerName = $pathFile;
+                }
                 $pathFull = $path.'/'.$pathFile.'.php';
                 if (file_exists($pathFull))
                 {
@@ -122,3 +156,4 @@ class Loader
 }
 
 Loader::getInstance();
+
