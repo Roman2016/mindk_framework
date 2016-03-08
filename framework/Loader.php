@@ -96,7 +96,6 @@ class Loader
      */
     public static function returnNamespacePath()
     {
-        //print_r (self::$someNamePath);
         return self::$someNamePath;
     }
 

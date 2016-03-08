@@ -32,7 +32,8 @@ abstract class Controller
     public function render($layout, $data = array())
     {
         $fullpath = realpath(\Loader::get_path_views() . $layout);
-        $renderer = new Renderer(Service::get('main_layout')); // Try to define renderer like a service. e.g.: Service::get('renderer');
+        // Try to define renderer like a service. e.g.: Service::get('renderer');
+        $renderer = new Renderer(Service::get('config')->get('main_layout'));
         $content = $renderer->render($fullpath, $data);
         return new Response($content);
     }
@@ -73,15 +74,5 @@ abstract class Controller
     {
         $request = null;
         return $this;
-    }
-
-    public function isPost()
-    {
-
-    }
-
-    public function post($param)
-    {
-
     }
 }

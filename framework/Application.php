@@ -20,6 +20,8 @@ use Framework\Exception\BadResponseTypeException;
 use Framework\Exception\AuthRequredException;
 use Framework\Exception\BadControllerTypeException;
 use Framework\Exception\InvalidArgumentException;
+use Framework\DI\Service;
+
 
 /**
  * Class Application
@@ -59,6 +61,10 @@ class Application
 
         $route = $router -> parseUrl(trim(strip_tags($_SERVER['REQUEST_URI'])));
 
+        //echo '<pre>';
+        //include(\Framework\Services\ServiceFactory::factory('config')->get('main_layout'));
+        //echo '</pre>';
+
         try
         {
             if(!empty($route))
@@ -75,6 +81,7 @@ class Application
                         if ($response instanceof Response)
                         {
                             // ...
+                            //include('../src/Blog/views/layout.html.php');
                         }
                         else
                         {
@@ -95,7 +102,8 @@ class Application
         catch(HttpNotFoundException $e)
         {
             // Render 404 or just show msg
-            echo $e->getMessage();
+            include(Service::get('config')->get('error_404'));
+            //echo $e->getMessage();
         }
         catch(AuthRequredException $e)
         {
@@ -114,7 +122,8 @@ class Application
         catch(\Exception $e)
         {
             // Do 500 layout...
-            echo $e->getMessage();
+            include(Service::get('config')->get('error_500'));
+            //echo $e->getMessage();
             //echo '<script>location.replace("_URL_");</script>'; exit;
         }
 

@@ -16,7 +16,6 @@ namespace Framework\Router;
  */
 class Router
 {
-
     /**
      * Хранилище для массива routes
      *
@@ -33,8 +32,6 @@ class Router
     public function __construct($path_routes_map = array())
     {
         self::$map = $path_routes_map;
-        //echo "<pre>";
-        //print_r(self::$map);
     }
 
     /**
@@ -115,8 +112,6 @@ class Router
             $pattern = preg_replace('~\{[\w\d_]+\}~Ui','([\w\d_]+)', $route['pattern']);
         }
         $pattern = '~^'.$pattern.'$~';
-        //echo '<pre>';
-        //print_r ($pattern);
         return $pattern;
     }
 }
