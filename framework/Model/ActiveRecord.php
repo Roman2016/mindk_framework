@@ -9,7 +9,6 @@
 namespace Framework\Model;
 
 use Framework\DI\Service;
-//use Blog\Model\User;
 
 abstract class ActiveRecord
 {
@@ -18,7 +17,7 @@ abstract class ActiveRecord
      *
      * @var null
      */
-    protected static $db = null;
+    protected static $pdo = null;
 
     /**
      * Class constructor
@@ -35,11 +34,11 @@ abstract class ActiveRecord
      */
     public static function getDBCon()
     {
-        if(empty(self::$db))
+        if(empty(self::$pdo))
         {
-            self::$db = Service::get('db');
+            self::$pdo = Service::get('db')->getDB();
         }
-        return self::$db;
+        return self::$pdo;
     }
 
     /**
@@ -63,17 +62,14 @@ abstract class ActiveRecord
         {
             $sql .= " WHERE id=".(int)$mode;
         }
-        // PDO request...
-        return $result;
-    }
-
-    public static function findByEmail($email)
-    {
+        $stmt = self::$pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch();
         return $result;
     }
 
     /**
-     *
+     * Return array variables of this class
      *
      * @return array
      */
@@ -84,15 +80,45 @@ abstract class ActiveRecord
 
     /**
      * Save data into current table
+     *
+     * Get array variables of this class and
+     * parameters of database connection
+     *
+     * Create query that depends from class variables
      */
     public function save()
     {
         $fields = $this->getFields();
-        // @TODO: build SQL expression, execute
+        array_shift($fields);
+        $table = static::getTable();
+        $key_mas = array();
+
+        foreach($fields as $key => $value)
+        {
+            $key_mas[] = $key;
+        }
+        $sql_query = "INSERT INTO " .$table. " (";;
+        $sql_data = "(";
+        for($i = 0; $i<count($fields); $i++)
+        {
+            if($i == count($fields)-1)
+            {
+                $sql_query = $sql_query.$key_mas[$i].") VALUES ";
+                $sql_data = $sql_data.' :'.$key_mas[$i].")";
+            }
+            else
+            {
+                $sql_query = $sql_query .$key_mas[$i]. ", ";
+                $sql_data = $sql_data.' :'.$key_mas[$i]. ", ";
+            }
+        }
+        $sql = $sql_query . $sql_data;
+        $stmt = self::$pdo->prepare($sql);
+        $stmt->execute($fields);
     }
 
     /**
-     * Delete data from current table
+     * Delete data from current row of table
      */
     public function delete()
     {

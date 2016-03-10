@@ -73,6 +73,7 @@ class Application
                 $action = $route['action'] . 'Action';
                 if($controllerReflection->hasMethod($action))
                 {
+                    // Проверка ролей юзера
                     $controller = $controllerReflection->newInstance();
                     if($controller instanceof Controller)
                     {
@@ -102,8 +103,8 @@ class Application
         catch(HttpNotFoundException $e)
         {
             // Render 404 or just show msg
+            $error = $e->getMessage();
             include(Service::get('config')->get('error_404'));
-            //echo $e->getMessage();
         }
         catch(AuthRequredException $e)
         {
