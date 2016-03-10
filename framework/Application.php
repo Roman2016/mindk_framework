@@ -30,6 +30,8 @@ use Framework\DI\Service;
 class Application
 {
     /**
+     *
+     *
      * @var array
      */
     public static $config_map = array();
@@ -45,13 +47,13 @@ class Application
     }
 
     /**
-     * Создает класс роутера и вызывает функцию, которая
-     * обрабатывает входящий url адрес
+     * Create Router class and call function that
+     * process URL address
      *
-     * Проверяет, используя рефлексию, наличие нужного класса
-     * контроллера и методов в нем
+     * Check using reflection presence of necessary class
+     * of controller and his methods
      *
-     * Создает соответствующий класс Response
+     * Create Response class
      */
     public function run()
     {

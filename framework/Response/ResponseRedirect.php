@@ -13,7 +13,7 @@ use Framework\Exception\InvalidArgumentException;
 class ResponseRedirect extends \Framework\Response\Response
 {
     /**
-     * Параметры переадресации
+     * Redirect URL address
      *
      * @var null
      */
@@ -40,7 +40,7 @@ class ResponseRedirect extends \Framework\Response\Response
     }
 
     /**
-     * Записывает url в массив Header
+     * Add location parameter to html Headers for redirection
      *
      * @param $url
      */

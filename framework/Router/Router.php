@@ -12,19 +12,20 @@
 namespace Framework\Router;
 
 /**
- * Router.php
+ * Class Router
+ * @package Framework\Router
  */
 class Router
 {
     /**
-     * Хранилище для массива routes
+     * Repository for routes array
      *
      * @var array
      */
     protected static $map = array ();
 
     /**
-     * Получает массив с параметрами
+     * Get array of routes
      *
      * Router constructor.
      * @param array $path_routes_map
@@ -35,9 +36,10 @@ class Router
     }
 
     /**
-     * Формирует пути к файлу контроллера используя url
-     * Выбирает соответствующий action
-     *     *
+     * Generate path to file using url
+     *
+     * Change current action
+     *
      * @param $url
      * @return $route_found
      */
@@ -65,7 +67,7 @@ class Router
     }
 
     /**
-     * Формирует нужный url адрес
+     * Generate necessary URL
      *
      * @param $route_name
      * @param array $params
@@ -89,7 +91,7 @@ class Router
     }
 
     /**
-     * Делает замену условия {id} на регулярное выражение
+     * Make replacement condition {id} to regular expression
      *
      * @param $route
      * @return mixed|string

@@ -19,35 +19,35 @@ namespace Framework\Response;
 class Response
 {
     /**
-     * Массив для значений Headers
+     * Array for Headers
      *
      * @var array
      */
     protected $headers = array();
 
     /**
-     * Код состояния
+     * Page status code
      *
      * @var int
      */
     public $code = 200;
 
     /**
-     * Передаваемый контент
+     * HTML content
      *
      * @var string
      */
     public $content = '';
 
     /**
-     * Тип данных
+     * Data type
      *
      * @var string
      */
     public $type = 'text/html';
 
     /**
-     * Хранилище кодов состояния
+     * Repository for status codes
      *
      * @var array
      */
@@ -74,7 +74,7 @@ class Response
     }
 
     /**
-     * Функция для отправки информации Headers и Body
+     * Send Headers and Body information
      */
     public function send()
     {
@@ -84,7 +84,7 @@ class Response
 
 
     /**
-     * Формирование массива для значений Headers
+     * Create array for Headers information
      *
      * @param $name
      * @param $value
@@ -95,7 +95,7 @@ class Response
     }
 
     /**
-     * Функция для отправки (отображения) параметров Headers
+     * Send Headers parameters to html
      */
     public function sendHeaders()
     {
@@ -106,7 +106,7 @@ class Response
     }
 
     /**
-     * Функция для отправки (отображения) параметров Body
+     * Send content to html Body
      */
     public function sendBody()
     {

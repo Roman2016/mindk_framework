@@ -8,6 +8,10 @@
 
 namespace Framework\Response;
 
+/**
+ * Class JsonResponse
+ * @package Framework\Response
+ */
 class JsonResponse extends \Framework\Response\Response
 {
     /**
@@ -22,7 +26,7 @@ class JsonResponse extends \Framework\Response\Response
     }
 
     /**
-     * Функция для отправки (отображения) параметров Body
+     * Send json information to html body
      */
     public function sendBody()
     {
