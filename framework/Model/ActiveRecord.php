@@ -28,6 +28,16 @@ abstract class ActiveRecord
     }
 
     /**
+     *
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        return [];
+    }
+
+    /**
      * Receive object with parameters of database connection
      *
      * @return null
