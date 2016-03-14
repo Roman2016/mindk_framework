@@ -14,6 +14,12 @@ namespace Framework\Validation\Filter;
  */
 class NotBlank implements ValidationFilterInterface
 {
+    /**
+     *
+     *
+     * @param $value
+     * @return bool
+     */
     public function isValid($value)
     {
         return !empty($value);

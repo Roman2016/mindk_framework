@@ -14,6 +14,7 @@ use Framework\Renderer\Renderer;
 use Framework\Response\ResponseRedirect;
 use Framework\DI\Service;
 use Framework\Exception\InvalidArgumentException;
+use Framework\Request\Request;
 
 /**
  * Class Controller
@@ -70,9 +71,13 @@ abstract class Controller
         }
     }
 
+    /**
+     * Return request class
+     *
+     * @return Request
+     */
     public function getRequest()
     {
-        $request = null;
-        return $this;
+        return new Request();
     }
 }

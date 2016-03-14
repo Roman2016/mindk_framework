@@ -14,11 +14,19 @@ namespace Framework\Validation\Filter;
  */
 class Length implements ValidationFilterInterface
 {
+    /**
+     * @var
+     */
     protected $min;
 
+    /**
+     * @var
+     */
     protected $max;
 
     /**
+     *
+     *
      * @param $min
      * @param $max
      */
@@ -28,6 +36,12 @@ class Length implements ValidationFilterInterface
         $this->max = $max;
     }
 
+    /**
+     *
+     *
+     * @param $value
+     * @return bool
+     */
     public function isValid($value)
     {
         return (strlen($value)>=$this->min) && (strlen($value)<=$this->max);

@@ -28,7 +28,7 @@ abstract class ActiveRecord
     }
 
     /**
-     *
+     * Return data validation rules
      *
      * @return array
      */

@@ -8,6 +8,8 @@
 
 namespace Framework\Request;
 
+use Framework\Validation\Validator;
+
 /**
  * Class Request
  * @package Framework\Request
@@ -15,6 +17,8 @@ namespace Framework\Request;
 class Request
 {
     /**
+     * Get type of request method
+     *
      * @return mixed
      */
     public function getMethod()
@@ -23,6 +27,8 @@ class Request
     }
 
     /**
+     * Check is method POST
+     *
      * @return bool
      */
     public function isPost()
@@ -31,6 +37,8 @@ class Request
     }
 
     /**
+     * Check is method GET
+     *
      * @return bool
      */
     public function isGet()
@@ -39,6 +47,8 @@ class Request
     }
 
     /**
+     * Get header parameters of HTTP request
+     *
      * @param null $header
      * @return array|false|null
      */
@@ -53,6 +63,9 @@ class Request
     }
 
     /**
+     * Return value of variable that transmitted from user
+     * by POST method
+     *
      * @param string $varname
      * @param string $filter
      * @return mixed
@@ -63,11 +76,15 @@ class Request
     }
 
     /**
+     * Filter value of transmitted variable
+     *
      * @param $value
      * @param string $filter
+     * @return mixed|null
      */
-    protected function filter($value, $filter = 'STRING')
+    protected function filter($value, $filter = 'string')
     {
-        // @TODO: ...
+        $validator = new Validator();
+        return $validator->validation($value, $filter);
     }
 }
