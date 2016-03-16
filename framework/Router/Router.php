@@ -100,7 +100,7 @@ class Router
     {
         $pattern = null;
 
-        if ($route['_requirements'] && $string == false)
+        if (isset($route['_requirements']) && $string == false)
         {
             foreach($route['_requirements'] as $key => $value)
             {

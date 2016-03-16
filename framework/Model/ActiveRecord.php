@@ -17,15 +17,7 @@ abstract class ActiveRecord
      *
      * @var null
      */
-    protected static $pdo = null;
-
-    /**
-     * Class constructor
-     */
-    public function __construct()
-    {
-        //override protection
-    }
+    public static $pdo = null;
 
     /**
      * Return data validation rules
@@ -56,7 +48,7 @@ abstract class ActiveRecord
      *
      * @return mixed
      */
-    abstract public static function getTable();
+    //abstract public static function getTable();
 
     /**
      * Perform select data from current table
@@ -138,7 +130,7 @@ abstract class ActiveRecord
     /**
      * Change data of current table
      */
-    public function changeData()
+    public function updateData()
     {
 
     }

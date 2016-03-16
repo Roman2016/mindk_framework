@@ -22,13 +22,40 @@ class Session
     public $messages = [];
 
     /**
+     * @var
+     */
+    public $returnUrl;
+
+    /**
+     * @var string
+     */
+    private $fingerprint;
+
+    /**
      *
      *
      * Session constructor.
      */
     public function __construct()
     {
-        session_start();
+        ini_set('display_errors', 1);
+        error_reporting(E_ALL);
+        setcookie('on','1');
+        if (isset($_SESSION['HTTP_USER_AGENT']))
+        {
+            if ($_SESSION['HTTP_USER_AGENT'] != md5($this->fingerprint))
+            {
+                session_destroy();
+                exit("Current session was destroyed, please reconnect");
+            }
+        }
+        else
+        {
+            session_start();
+            $_SESSION['HTTP_USER_AGENT'] = md5($_SESSION['HTTP_USER_AGENT']);
+            $this->fingerprint = 'fingerprint' . $_SERVER['HTTP_USER_AGENT'] . session_id();
+            $_SESSION['HTTP_USER_AGENT'] = md5($this->fingerprint);
+        }
     }
 
     /**

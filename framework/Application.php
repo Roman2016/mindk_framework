@@ -22,6 +22,7 @@ use Framework\Exception\BadControllerTypeException;
 use Framework\Exception\InvalidArgumentException;
 use Framework\DI\Service;
 use Framework\Session\Session;
+use Framework\Model\ActiveRecord;
 
 
 /**
@@ -43,9 +44,11 @@ class Application
      */
     public function __construct($config_path = array())
     {
+        //override protection
         self::$config_map = $config_path;
         Service::set('session', new Session());
-        //override protection
+        Service::get('session');
+        ActiveRecord::getDBCon();
     }
 
     /**
@@ -87,6 +90,7 @@ class Application
                         {
                             // ...
                             //include('../src/Blog/views/layout.html.php');
+                            //new ResponseRedirect('/');
                         }
                         else
                         {
