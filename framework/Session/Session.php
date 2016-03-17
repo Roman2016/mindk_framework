@@ -38,8 +38,8 @@ class Session
      */
     public function __construct()
     {
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL);
+        //ini_set('display_errors', 1);
+        //error_reporting(E_ALL);
         setcookie('on','1');
         if (isset($_SESSION['HTTP_USER_AGENT']))
         {

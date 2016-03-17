@@ -42,7 +42,8 @@ abstract class ServiceFactory
      */
     public static function getConfig()
     {
-        self::$config = include(Application::$config_map);
+        $config_map = include(Application::$config_map);
+        self::$config = $config_map['service'];
         return self::$config;
     }
 

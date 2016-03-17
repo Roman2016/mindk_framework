@@ -15,13 +15,5 @@ return array(
         'user_class'    => 'Blog\\Model\\User',
         'login_route'   => 'login'
     ),
-    'session'     => array(
-        'session_class' =>  'Framework\\Session\\Session'
-    ),
-    'config'      => array(
-        'config_class'  =>  'Framework\\Services\\Config'
-    ),
-    'db'          => array(
-        'db_class'      =>  'Framework\\Services\\DB'
-    )
+    'service'    => include('service_config.php')
 );

@@ -17,7 +17,7 @@ use Framework\DI\Service;
 class DB
 {
     /**
-     * Array parameters of database connection
+     * Array of database connection parameters
      *
      * @var
      */

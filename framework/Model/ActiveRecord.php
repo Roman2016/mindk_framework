@@ -48,7 +48,7 @@ abstract class ActiveRecord
      *
      * @return mixed
      */
-    //abstract public static function getTable();
+    abstract public static function getTable();
 
     /**
      * Perform select data from current table
