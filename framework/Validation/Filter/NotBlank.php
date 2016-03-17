@@ -15,7 +15,7 @@ namespace Framework\Validation\Filter;
 class NotBlank implements ValidationFilterInterface
 {
     /**
-     *
+     * Check, is value correct according with parameters
      *
      * @param $value
      * @return bool
@@ -23,5 +23,15 @@ class NotBlank implements ValidationFilterInterface
     public function isValid($value)
     {
         return !empty($value);
+    }
+
+    /**
+     * Return error message
+     *
+     * @return string
+     */
+    public function error()
+    {
+        return "Field is empty";
     }
 }

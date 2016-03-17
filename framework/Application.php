@@ -78,6 +78,8 @@ class Application
                 $action = $route['action'] . 'Action';
                 if($controllerReflection->hasMethod($action))
                 {
+                    //$response = new ResponseRedirect("/signin");
+
                     // Проверка ролей юзера
                     $controller = $controllerReflection->newInstance();
                     if($controller instanceof Controller)
@@ -130,8 +132,6 @@ class Application
         {
             // Do 500 layout...
             include(Service::get('config')->get('error_500'));
-            //echo $e->getMessage();
-            //echo '<script>location.replace("_URL_");</script>'; exit;
         }
 
         $response->send();

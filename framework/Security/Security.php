@@ -14,7 +14,7 @@ namespace Framework\Security;
  */
 class Security
 {
-    protected function __construct()
+    public function __construct()
     {
 
     }

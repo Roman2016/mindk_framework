@@ -14,16 +14,41 @@ use Framework\Validation\Filter\NotBlank;
 
 class Post extends ActiveRecord
 {
+    /**
+     * @var
+     */
     public $title;
+
+    /**
+     * @var
+     */
     public $content;
+
+    /**
+     * @var
+     */
     public $date;
+
+    /**
+     * @var
+     */
     public $id;
 
+    /**
+     * Return current table name
+     *
+     * @return string
+     */
     public static function getTable()
     {
         return 'posts';
     }
 
+    /**
+     * Return array of validation classes
+     *
+     * @return array
+     */
     public function getRules()
     {
         return array(

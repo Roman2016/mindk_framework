@@ -25,8 +25,7 @@ class Length implements ValidationFilterInterface
     protected $max;
 
     /**
-     *
-     *
+     * Length constructor.
      * @param $min
      * @param $max
      */
@@ -37,7 +36,7 @@ class Length implements ValidationFilterInterface
     }
 
     /**
-     *
+     * Check, is value correct according with parameters
      *
      * @param $value
      * @return bool
@@ -45,5 +44,15 @@ class Length implements ValidationFilterInterface
     public function isValid($value)
     {
         return (strlen($value)>=$this->min) && (strlen($value)<=$this->max);
+    }
+
+    /**
+     * Return error message
+     *
+     * @return string
+     */
+    public function error()
+    {
+        return "Title must contain from $this->min to $this->max characters";
     }
 }
