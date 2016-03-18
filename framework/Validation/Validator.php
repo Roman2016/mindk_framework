@@ -41,6 +41,7 @@ class Validator
     {
         $rules_arr = $this->object->getRules();
         $object_vars = get_object_vars($this->object);
+        $this->error = null;
         foreach ($rules_arr as $key => $value)
         {
             if (array_key_exists($key, $object_vars))
@@ -57,6 +58,7 @@ class Validator
                 }
             }
         }
+        return !empty($this->error);
     }
 
     /**

@@ -15,24 +15,21 @@ namespace Framework\Session;
 class Session
 {
     /**
-     *
-     *
-     * @var array
-     */
-    public $messages = [];
-
-    /**
      * @var
      */
     public $returnUrl;
 
     /**
+     * Secret code to check session
+     *
      * @var string
      */
     private $fingerprint;
 
     /**
-     *
+     * Start session, cookie
+     * Generate secret fingerprint
+     * Check user for current session
      *
      * Session constructor.
      */
@@ -48,6 +45,7 @@ class Session
                 session_destroy();
                 exit("Current session was destroyed, please reconnect");
             }
+            $this->returnUrl = trim(strip_tags($_SERVER['REQUEST_URI']));
         }
         else
         {
@@ -59,28 +57,28 @@ class Session
     }
 
     /**
-     *
+     * Set new parameter to session array
      *
      * @param $name
      * @param $val
      */
     public function __set($name, $val)
     {
-
+        $_SESSION["$name"] = $val;
     }
 
     /**
-     *
+     * Get parameters from sessions array
      *
      * @param $name
      */
     public function __get($name)
     {
-
+        return $_SESSION["$name"];
     }
 
     /**
-     *
+     * Add messages to session array
      *
      * @param $type
      * @param $message
