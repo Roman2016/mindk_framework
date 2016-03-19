@@ -72,6 +72,15 @@ class Request
      */
     public function post($varname = '', $filter = 'STRING')
     {
+        if($varname = 'password')
+        {
+            if($this->filter($_POST[$varname], $filter))
+            {
+                $password = $this->filter($_POST[$varname], $filter);
+                return password_hash($password, PASSWORD_BCRYPT);
+            }
+            return $this->filter($_POST[$varname], $filter);
+        }
         return $this->filter($_POST[$varname], $filter);
     }
 

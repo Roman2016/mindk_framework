@@ -17,6 +17,8 @@ use Framework\DI\Service;
 class Security
 {
     /**
+     * User object
+     *
      * @var null
      */
     private $object = null;
@@ -31,6 +33,11 @@ class Security
         //override protection
     }
 
+    /**
+     * Set value of user variables to session array
+     *
+     * @param $user
+     */
     public function setUser($user)
     {
         $object_vars = get_object_vars($this->object);
@@ -38,18 +45,33 @@ class Security
         {
             if (array_key_exists($key, $object_vars))
             {
-
+                $_SESSION[$key] = $value;
             }
         }
     }
 
+    /**
+     * Unset all user session variables
+     */
     public  function clear()
     {
-
+        session_unset();
     }
 
+    /**
+     * Return true if user is authenticated
+     *
+     * @return bool
+     */
     public function isAuthenticated()
     {
-
+        if(isset($_SESSION['password']))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

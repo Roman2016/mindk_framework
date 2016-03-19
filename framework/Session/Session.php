@@ -17,7 +17,7 @@ class Session
     /**
      * @var
      */
-    public $returnUrl;
+    private $returnUrl;
 
     /**
      * Secret code to check session
@@ -42,6 +42,7 @@ class Session
         {
             if ($_SESSION['HTTP_USER_AGENT'] != md5($this->fingerprint))
             {
+                session_unset();
                 session_destroy();
                 exit("Current session was destroyed, please reconnect");
             }
@@ -57,24 +58,24 @@ class Session
     }
 
     /**
-     * Set new parameter to session array
+     * Set new URL parameter
      *
      * @param $name
      * @param $val
      */
     public function __set($name, $val)
     {
-        $_SESSION["$name"] = $val;
+        $this->name = $val;
     }
 
     /**
-     * Get parameters from sessions array
+     * Get parameters from private variables
      *
      * @param $name
      */
     public function __get($name)
     {
-        return $_SESSION["$name"];
+        return $name;
     }
 
     /**
