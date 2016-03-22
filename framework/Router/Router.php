@@ -33,6 +33,9 @@ class Router
     public function __construct($path_routes_map = array())
     {
         self::$map = $path_routes_map;
+        //echo '<pre>';
+        //print_r(self::$map);
+        //echo '</pre>';
     }
 
     /**
@@ -63,7 +66,7 @@ class Router
                 array_shift($params); // Get rid of 0 element
                 $route_found = $route;
                 $route_found['params'] = $params;
-                $route_found['_name'] = $key;
+                //$route_found['_name'] = $key;
                 break;
             }
         }
@@ -80,7 +83,6 @@ class Router
     public function buildUrl($route_name, $params = array())
     {
         $url = null;
-
         $url = array_key_exists($route_name, self::$map) ? '/web'.self::$map[$route_name]['pattern'] : '/web/';
         if(!empty($params))
         {

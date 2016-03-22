@@ -11,6 +11,9 @@
 
 namespace Framework;
 
+use Framework\Exception\BadPathTypeException;
+use Framework\Exception\DatabaseException;
+use Framework\Exception\InvalidTypeException;
 use Framework\Router\Router;
 use Framework\Response\Response;
 use Framework\Response\ResponseRedirect;
@@ -131,6 +134,22 @@ class Application
             echo $e->getMessage();
         }
         catch(BadResponseTypeException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch(BadPathTypeException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch(DatabaseException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch(InvalidTypeException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch(BadControllerTypeException $e)
         {
             echo $e->getMessage();
         }

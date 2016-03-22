@@ -12,6 +12,8 @@ use Blog\Controller\PostController;
 use Framework\Controller\Controller;
 use Framework\Router\Router;
 use Framework\Exception\HttpNotFoundException;
+use Framework\DI\Service;
+use Blog\Model\User;
 
 /**
  * Class Renderer
@@ -75,15 +77,25 @@ class Renderer
             $controller = new $controller;
             $method = $action.'Action';
             extract($data);
+            //echo $id;
             return $result = $controller->$method($id);
         };
-        /*
         $getRoute = function($key)
         {
             $controller = 'Blog\\Controller\\TestController';
             $controller = new $controller;
             return $controller->generateRoute($key);
         };
+
+        if(Service::get('security')->isAuthenticated())
+        {
+            $user = true;
+        }
+        else
+        {
+            $user = null;
+        }
+        /*
         $generateToken = function()
         {
             $token = '11111111';

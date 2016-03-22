@@ -51,6 +51,7 @@ class SecurityController extends Controller
         if (Service::get('security')->isAuthenticated()) {
             return new ResponseRedirect($this->generateRoute('home'));
         }
+
         $errors = array();
 
         if ($this->getRequest()->isPost()) {

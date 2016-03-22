@@ -13,7 +13,6 @@ use Framework\Controller\Controller;
 use Framework\DI\Service;
 use Framework\Exception\DatabaseException;
 use Framework\Exception\HttpNotFoundException;
-use Framework\Request\Request;
 use Framework\Response\Response;
 use Framework\Validation\Validator;
 
@@ -22,13 +21,6 @@ class PostController extends Controller
 
     public function indexAction()
     {
-        //echo '<pre>';
-        //print_r(array('posts' => Post::find('all')));
-        //extract(array('posts' => Post::find('all')));
-        //print_r($posts);
-        //echo $content;
-        //echo '</pre>';
-        //echo Post::getThisClass();
         return $this->render('index.html', array('posts' => Post::find('all')));
     }
 

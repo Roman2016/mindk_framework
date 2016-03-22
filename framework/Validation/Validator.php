@@ -94,7 +94,7 @@ class Validator
                     return $value;
                 }
                 break;
-            case 'validate_email':
+            case 'email':
                 if(filter_var($value, FILTER_VALIDATE_EMAIL))
                 {
                     return $value = filter_var($value, FILTER_SANITIZE_EMAIL);

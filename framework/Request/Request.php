@@ -70,9 +70,9 @@ class Request
      * @param string $filter
      * @return mixed
      */
-    public function post($varname = '', $filter = 'STRING')
+    public function post($varname = '', $filter = "string")
     {
-        if($varname = 'password')
+        if($varname == 'password')
         {
             if($this->filter($_POST[$varname], $filter))
             {
