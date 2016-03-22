@@ -11,7 +11,7 @@ namespace Framework\Renderer;
 use Blog\Controller\PostController;
 use Framework\Controller\Controller;
 use Framework\Router\Router;
-use Framework\Exception\BadPathTypeException; // Нужно выбрасывать исключение если нет файла?
+use Framework\Exception\HttpNotFoundException;
 
 /**
  * Class Renderer
@@ -32,7 +32,8 @@ class Renderer
      */
     public function __construct($main_template_file)
     {
-        $this -> main_template = $main_template_file;
+        $this->main_template = $main_template_file;
+        //echo $this->main_template;
     }
 
     /**
@@ -44,12 +45,12 @@ class Renderer
      */
     public function renderMain($content)
     {
-        //@TODO: set all required vars and closures...
-        /** Some required vars or closures...
-        $activeIfRoute('home');
-        $getRoute('home');
-        */
-        return $this -> render($this->main_template, compact('content'), false);
+        return $this->render($this->main_template, compact('content'), false);
+    }
+
+    public function renderMainMy()
+    {
+        return $this->main_template;
     }
 
     /**
@@ -59,17 +60,16 @@ class Renderer
      * @param   mixed   $data array
      * @param   bool    to be wrapped with main template if true
      *
+     * @throws HttpNotFoundException
+     *
      * @return  text/html
      */
     public function render($template_path, $data = array(), $wrap = true)
     {
         extract($data);
-        // @TODO: provide all required vars or closures...
+
         ob_start();
-        if(file_exists($template_path)) // Проверка на наличие файла по заданному адресу
-        {
-            include($template_path);
-        }
+
         $include = function($controller, $action, $data)
         {
             $controller = new $controller;
@@ -77,22 +77,37 @@ class Renderer
             extract($data);
             return $result = $controller->$method($id);
         };
+        /*
         $getRoute = function($key)
         {
             $controller = 'Blog\\Controller\\TestController';
             $controller = new $controller;
             return $controller->generateRoute($key);
         };
-        /** Some required vars or closures...
-        $getValidationClass('title');
-        $getErrorBody('title');
-        $generateToken();
+        $generateToken = function()
+        {
+            $token = '11111111';
+            $token = '<input type="hidden" name="token" value="' . $token . '">';
+            return $token;
+        };
         */
-        $content = ob_end_clean();
+        if(file_exists($template_path)) // Проверка на наличие файла по заданному адресу
+        {
+            include($template_path);
+        }
+        else
+        {
+            throw new HttpNotFoundException('Route not found');
+        }
+        $content = ob_get_contents();
         if($wrap)
         {
-            $content = $this -> renderMain($content);
+            $content = $this->renderMain($content);
         }
+        ob_end_clean();
+        //echo '<pre>';
+        //print_r($content);
+        //echo '</pre>';
         return $content;
     }
 }

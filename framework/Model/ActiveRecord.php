@@ -46,9 +46,16 @@ abstract class ActiveRecord
     /**
      * Get the name of table
      *
-     * @return mixed
+     * @return string
      */
     abstract public static function getTable();
+
+    /**
+     * Get the name of class-inheritor
+     *
+     * @return string
+     */
+    abstract public static function getThisClass();
 
     /**
      * Perform select data from current table
@@ -58,6 +65,7 @@ abstract class ActiveRecord
      */
     public static function find($mode = 'all')
     {
+        $class = static::getThisClass();
         $table = static::getTable();
         $sql = "SELECT * FROM " . $table;
         if(is_numeric($mode))
@@ -66,7 +74,7 @@ abstract class ActiveRecord
         }
         $stmt = self::$pdo->prepare($sql);
         $stmt->execute();
-        $result = $stmt->fetch();
+        $result = $stmt->fetchAll(\PDO::FETCH_CLASS, "$class");
         return $result;
     }
 

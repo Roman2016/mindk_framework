@@ -45,6 +45,9 @@ class Application
     {
         //override protection
         self::$config_map = $config_path;
+        //print_r(self::$config_map);
+        //$mas = include(self::$config_map);
+        //print_r($mas);
         Service::get('session');
         ActiveRecord::getDBCon();
     }
@@ -64,8 +67,10 @@ class Application
 
         $router = new Router(include('../app/config/routes.php'));
 
-        $route = $router -> parseUrl(trim(strip_tags($_SERVER['REQUEST_URI'])));
-
+        $route = $router->parseUrl(trim(strip_tags($_SERVER['REQUEST_URI'])));
+        //echo '<pre>';
+        //print_r($route);
+        //echo '</pre>';
         //echo '<pre>';
         //include(\Framework\Services\ServiceFactory::factory('config')->get('main_layout'));
         //echo '</pre>';
@@ -89,6 +94,7 @@ class Application
                         if ($response instanceof Response)
                         {
                             // ...
+                            $response->send();
                             //include('../src/Blog/views/layout.html.php');
                             //new ResponseRedirect('/');
                         }
@@ -133,7 +139,5 @@ class Application
             // Do 500 layout...
             include(Service::get('config')->get('error_500'));
         }
-
-        $response->send();
     }
 }

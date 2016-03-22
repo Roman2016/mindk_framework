@@ -49,8 +49,11 @@ class Router
         $string = null; // Additional condition in the choice of regular expression
         $url = str_replace('/web', '', $url); // если проблемы с редиректом
 
-        foreach(self::$map as $route)
+        foreach(self::$map as $key => $route)
         {
+            //echo '<pre>';
+            //print_r($key);
+            //echo '</pre>';
             $pattern = $this -> preparePattern($route, $string = false);
             if(preg_match($pattern, $url, $params))
             {
@@ -60,6 +63,7 @@ class Router
                 array_shift($params); // Get rid of 0 element
                 $route_found = $route;
                 $route_found['params'] = $params;
+                $route_found['_name'] = $key;
                 break;
             }
         }

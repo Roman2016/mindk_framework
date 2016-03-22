@@ -22,6 +22,13 @@ class PostController extends Controller
 
     public function indexAction()
     {
+        //echo '<pre>';
+        //print_r(array('posts' => Post::find('all')));
+        //extract(array('posts' => Post::find('all')));
+        //print_r($posts);
+        //echo $content;
+        //echo '</pre>';
+        //echo Post::getThisClass();
         return $this->render('index.html', array('posts' => Post::find('all')));
     }
 

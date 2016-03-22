@@ -51,9 +51,9 @@ class Session
         else
         {
             session_start();
-            $_SESSION['HTTP_USER_AGENT'] = md5($_SESSION['HTTP_USER_AGENT']);
+            $_SESSION['HTTP_USER_AGENT'] = password_hash(md5($_SESSION['HTTP_USER_AGENT']), PASSWORD_BCRYPT);
             $this->fingerprint = 'fingerprint' . $_SERVER['HTTP_USER_AGENT'] . session_id();
-            $_SESSION['HTTP_USER_AGENT'] = md5($this->fingerprint);
+            $_SESSION['HTTP_USER_AGENT'] = password_hash(md5($this->fingerprint), PASSWORD_BCRYPT);
         }
     }
 

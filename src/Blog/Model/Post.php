@@ -14,24 +14,9 @@ use Framework\Validation\Filter\NotBlank;
 
 class Post extends ActiveRecord
 {
-    /**
-     * @var
-     */
     public $title;
-
-    /**
-     * @var
-     */
     public $content;
-
-    /**
-     * @var
-     */
     public $date;
-
-    /**
-     * @var
-     */
     public $id;
 
     /**
@@ -42,6 +27,16 @@ class Post extends ActiveRecord
     public static function getTable()
     {
         return 'posts';
+    }
+
+    /**
+     * Return name of this class
+     *
+     * @return string
+     */
+    public static function getThisClass()
+    {
+        return __CLASS__;
     }
 
     /**

@@ -20,4 +20,11 @@ interface UserInterface
      * @return mixed
      */
     public function getRole();
+
+    /**
+     * Get name of this class
+     *
+     * @return string
+     */
+    public static function getThisClass();
 }

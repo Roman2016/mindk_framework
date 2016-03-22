@@ -9,6 +9,7 @@
 namespace Framework\Security;
 
 use Framework\DI\Service;
+use Framework\Request\Request;
 
 /**
  * Class Security
@@ -24,13 +25,45 @@ class Security
     private $object = null;
 
     /**
+     * Token hashcode
+     *
+     * @var null
+     */
+    private $token = null;
+
+    /**
      * Security constructor.
      */
     public function __construct()
     {
         $user_class = Service::get('config')->get('security');
         $this->object = new $user_class['user_class'];
+        if($this->getRequest()->isPost())
+        {
+            $this->token = password_hash($_SESSION['email'].'secret_code', PASSWORD_BCRYPT);
+            $_SESSION['token'] = $this->token;
+            setcookie('token', "$this->token", time()+300);
+        }
+        if($this->getRequest()->isGet())
+        {
+            // С каким значением сравнивать сгенерированный токен?
+            if($_SESSION['token'] || $_COOKIE['token'])
+            {
+
+            }
+        }
+
         //override protection
+    }
+
+    /**
+     * Return request class
+     *
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return new Request();
     }
 
     /**
@@ -41,6 +74,7 @@ class Security
     public function setUser($user)
     {
         $object_vars = get_object_vars($this->object);
+        array_shift($object_vars);
         foreach ($user as $key => $value)
         {
             if (array_key_exists($key, $object_vars))

@@ -32,9 +32,19 @@ abstract class Controller
      */
     public function render($layout, $data = array())
     {
-        $fullpath = realpath(\Loader::get_path_views() . $layout);
+        $fullpath = realpath(\Loader::get_path_views() . $layout . '.php');
+        //echo $fullpath;
+        //include($fullpath);
+        //include(__DIR__.'/../../src/Blog/views/layout.html.php');
+        //include(__DIR__.'/../../src/Blog/views/Security/signin.html.php');
+        //echo '<pre>';
+        //echo __DIR__.'/../../src/Blog/views/layout.html.php';
+        //echo '</pre>';
+        //echo include(__DIR__.'/../../src/Blog/views/layout.html.php');
+        //echo session_id();
         // Try to define renderer like a service. e.g.: Service::get('renderer');
-        $renderer = new Renderer(Service::get('config')->get('main_layout'));
+        //echo realpath(Service::get('config')->get('main_layout'));
+        $renderer = new Renderer(realpath(Service::get('config')->get('main_layout')));
         $content = $renderer->render($fullpath, $data);
         return new Response($content);
     }
