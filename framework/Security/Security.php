@@ -87,9 +87,14 @@ class Security
     /**
      * Unset all user session variables
      */
-    public  function clear()
+    public function clear()
     {
-        session_unset();
+        $object_vars = get_object_vars($this->object);
+        array_shift($object_vars);
+        foreach ($object_vars as $key => $value)
+        {
+            unset($_SESSION[$key]);
+        }
     }
 
     /**

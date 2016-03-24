@@ -26,7 +26,7 @@ class SecurityController extends Controller
         if ($this->getRequest()->isPost()) {
 
             if ($user = User::findByEmail($this->getRequest()->post('email'))) {
-                if ($user['password'] == $this->getRequest()->post('password')) {
+                if ($user['password'] == $this->getRequest()->post('password', $user['password'])) {
                     Service::get('security')->setUser($user);
                     $returnUrl = Service::get('session')->returnUrl;
                     unset(Service::get('session')->returnUrl);
@@ -56,11 +56,31 @@ class SecurityController extends Controller
 
         if ($this->getRequest()->isPost()) {
             try{
-                $user           = new User();
-                $user->email    = $this->getRequest()->post('email');
-                $user->password = $this->getRequest()->post('password');
-                $user->role     = 'ROLE_USER';
-                $user->save();
+                if ($user_mas = User::findByEmail($this->getRequest()->post('email')))
+                {
+                    if ($user_mas['password'] == $this->getRequest()->post('password', $user_mas['password']))
+                    {
+                        Service::get('security')->setUser($user_mas);
+                    }
+                    else
+                    {
+                        $errors = array('errror' => "User with that email is already register!");
+                        //echo $errors;
+                        foreach ($errors as $error) {
+                            echo $error;
+                        }
+                    }
+                }
+                else
+                {
+                    $user           = new User();
+                    $user->email    = $this->getRequest()->post('email');
+                    $user->password = $this->getRequest()->post('password');
+                    $user->role     = 'ROLE_USER';
+                    $user->save();
+                    $user_mas = User::findByEmail($this->getRequest()->post('email'));
+                    Service::get('security')->setUser($user_mas);
+                }
                 return $this->redirect($this->generateRoute('home'));
             } catch(DatabaseException $e){
                 $errors = array($e->getMessage());

@@ -48,6 +48,6 @@ class ResponseRedirect extends \Framework\Response\Response
     {
         $this->targetUrl = $url;
 
-        $this->setHeader('Location', '/web'.$url);
+        $this->setHeader('Location', $url);
     }
 }

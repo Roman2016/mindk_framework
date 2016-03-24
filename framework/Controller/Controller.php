@@ -62,7 +62,6 @@ abstract class Controller
         {
             $router = new Router(Service::get('config')->get('routes'));
             $url = $router->buildUrl($key);
-            //echo $url;
             return $url;
         }
         else

@@ -14,6 +14,7 @@ use Framework\Router\Router;
 use Framework\Exception\HttpNotFoundException;
 use Framework\DI\Service;
 use Blog\Model\User;
+use Framework\Request\Request;
 
 /**
  * Class Renderer
@@ -89,12 +90,14 @@ class Renderer
 
         if(Service::get('security')->isAuthenticated())
         {
-            $user = true;
+            $user = new User();
+            $user->email = $_SESSION['email'];
         }
         else
         {
             $user = null;
         }
+
         /*
         $generateToken = function()
         {
@@ -109,7 +112,7 @@ class Renderer
         }
         else
         {
-            throw new HttpNotFoundException('Route not found');
+            throw new HttpNotFoundException('Route to HTML not found');
         }
         $content = ob_get_contents();
         if($wrap)

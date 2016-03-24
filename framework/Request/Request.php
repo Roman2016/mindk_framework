@@ -70,14 +70,24 @@ class Request
      * @param string $filter
      * @return mixed
      */
-    public function post($varname = '', $filter = "string")
+    public function post($varname = '', $hash = false, $filter = "string")
     {
         if($varname == 'password')
         {
             if($this->filter($_POST[$varname], $filter))
             {
-                $password = $this->filter($_POST[$varname], $filter);
-                return password_hash($password, PASSWORD_BCRYPT);
+                if(empty($hash))
+                {
+                    $password = $this->filter($_POST[$varname], $filter);
+                    return password_hash($password, PASSWORD_BCRYPT);
+                }
+                else
+                {
+                    if(password_verify($_POST[$varname], $hash)) // Check is password correct
+                    {
+                        return $hash;
+                    }
+                }
             }
             return $this->filter($_POST[$varname], $filter);
         }
