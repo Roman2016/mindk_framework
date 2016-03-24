@@ -13,6 +13,7 @@ use Framework\Controller\Controller;
 use Framework\DI\Service;
 use Framework\Exception\DatabaseException;
 use Framework\Response\ResponseRedirect;
+use Framework\Session\Session;
 
 class SecurityController extends Controller
 {
@@ -28,9 +29,11 @@ class SecurityController extends Controller
             if ($user = User::findByEmail($this->getRequest()->post('email'))) {
                 if ($user['password'] == $this->getRequest()->post('password', $user['password'])) {
                     Service::get('security')->setUser($user);
+                    Service::get('session')->control();
                     $returnUrl = Service::get('session')->returnUrl;
                     unset(Service::get('session')->returnUrl);
-                    return $this->redirect(!is_null($returnUrl)?$returnUrl:$this->generateRoute('home'));
+                    return $this->redirect((!is_null($returnUrl) || $returnUrl == '/web/login')
+                                                      ?$returnUrl:$this->generateRoute('home'));
                 }
             }
 
@@ -58,18 +61,8 @@ class SecurityController extends Controller
             try{
                 if ($user_mas = User::findByEmail($this->getRequest()->post('email')))
                 {
-                    if ($user_mas['password'] == $this->getRequest()->post('password', $user_mas['password']))
-                    {
-                        Service::get('security')->setUser($user_mas);
-                    }
-                    else
-                    {
-                        $errors = array('errror' => "User with that email is already register!");
-                        //echo $errors;
-                        foreach ($errors as $error) {
-                            echo $error;
-                        }
-                    }
+                    array_push($errors, 'This email is already register!');
+                    return $this->render('signin.html', array('errors' => $errors));
                 }
                 else
                 {
@@ -80,8 +73,8 @@ class SecurityController extends Controller
                     $user->save();
                     $user_mas = User::findByEmail($this->getRequest()->post('email'));
                     Service::get('security')->setUser($user_mas);
+                    return $this->redirect($this->generateRoute('home'));
                 }
-                return $this->redirect($this->generateRoute('home'));
             } catch(DatabaseException $e){
                 $errors = array($e->getMessage());
             }

@@ -71,7 +71,7 @@ abstract class ServiceFactory
                     return $object;
                 }
             }
-            throw new InvalidTypeException("There are no objects in service!");
+            throw new InvalidTypeException("There are no objects in service $service_name!");
         }
         else
         {

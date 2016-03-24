@@ -31,6 +31,7 @@ class PostController extends Controller
 
     public function addAction()
     {
+        Service::get('session')->getUrl();
         if ($this->getRequest()->isPost()) {
             try{
                 $post          = new Post();

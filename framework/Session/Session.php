@@ -8,6 +8,8 @@
 
 namespace Framework\Session;
 
+use Blog\Controller\SecurityController;
+
 /**
  * Class Session
  * @package Framework\Session
@@ -17,7 +19,7 @@ class Session
     /**
      * @var
      */
-    private $returnUrl;
+    public $returnUrl;
 
     /**
      * Secret code to check session
@@ -40,11 +42,14 @@ class Session
         setcookie('on','1');
         if (isset($_SESSION['HTTP_USER_AGENT']))
         {
-            if ($_SESSION['HTTP_USER_AGENT'] != md5($this->fingerprint))
+            if (password_verify(($this->fingerprint), $_SESSION['HTTP_USER_AGENT']))
             {
                 session_unset();
                 session_destroy();
-                exit("Current session was destroyed, please reconnect");
+                $errors = array();
+                array_push($errors, "Current session was destroyed, please reconnect");
+                $controller = new SecurityController();
+                return $controller->render('login.html', array('errors' => $errors));
             }
             $this->returnUrl = trim(strip_tags($_SERVER['REQUEST_URI']));
         }
@@ -53,8 +58,43 @@ class Session
             session_start();
             $_SESSION['HTTP_USER_AGENT'] = password_hash(md5($_SESSION['HTTP_USER_AGENT']), PASSWORD_BCRYPT);
             $this->fingerprint = 'fingerprint' . $_SERVER['HTTP_USER_AGENT'] . session_id();
-            $_SESSION['HTTP_USER_AGENT'] = password_hash(md5($this->fingerprint), PASSWORD_BCRYPT);
+            $_SESSION['HTTP_USER_AGENT'] = password_hash(($this->fingerprint), PASSWORD_BCRYPT);
+            $this->returnUrl = trim(strip_tags($_SERVER['REQUEST_URI']));
         }
+    }
+
+    /**
+     *
+     *
+     * @return \Framework\Response\Response
+     */
+    public function control()
+    {
+        if (isset($_SESSION['HTTP_USER_AGENT']))
+        {
+            if (!password_verify(($this->fingerprint), $_SESSION['HTTP_USER_AGENT']))
+            {
+                session_unset();
+                session_destroy();
+                $errors = array();
+                array_push($errors, "Current session was destroyed, please reconnect");
+                $controller = new SecurityController();
+                return $controller->render('login.html', array('errors' => $errors));
+            }
+        }
+        else
+        {
+            session_start();
+            $_SESSION['HTTP_USER_AGENT'] = password_hash(md5($_SESSION['HTTP_USER_AGENT']), PASSWORD_BCRYPT);
+            $this->fingerprint = 'fingerprint' . $_SERVER['HTTP_USER_AGENT'] . session_id();
+            $_SESSION['HTTP_USER_AGENT'] = password_hash(($this->fingerprint), PASSWORD_BCRYPT);
+            $this->returnUrl = trim(strip_tags($_SERVER['REQUEST_URI']));
+        }
+    }
+
+    public function getUrl()
+    {
+        $this->returnUrl = trim(strip_tags($_SERVER['REQUEST_URI']));
     }
 
     /**
