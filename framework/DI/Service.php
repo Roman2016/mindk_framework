@@ -9,6 +9,7 @@
 namespace Framework\DI;
 
 use Framework\Application;
+use Framework\Services\ServiceFactory;
 
 /**
  * Class Service
@@ -17,45 +18,41 @@ use Framework\Application;
 class Service
 {
     /**
-     * @var
+     * Array of services
+     *
+     * @var array
      */
-    public $returnUrl;
+    protected static $services = array();
 
     /**
      * Service constructor.
      */
     public function __construct()
     {
-
+        //override protection
     }
 
     /**
-     * Return appropriate config parameter
+     * Write values in array of services
      *
-     * @param $param
-     * @return mixed
+     * @param $service_name
+     * @param $obj
      */
-    public static function get($param)
+    public static function set($service_name, $obj)
     {
-        if($param === 'config')
-        {
-            return new self();
-        }
-        return Application::$config_map["$param"];
+        self::$services[$service_name] = $obj;
     }
 
-    public function isAuthenticated()
+    /**
+     * Return current service object
+     *
+     * @param $service_name
+     * @return null
+     */
+    public static function get($service_name)
     {
-
+        return empty(self::$services[$service_name]) ? ServiceFactory::factory($service_name)
+                                                     : self::$services[$service_name];
     }
 
-    public function setUser($user)
-    {
-
-    }
-
-    public function clear()
-    {
-
-    }
 }

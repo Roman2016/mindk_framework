@@ -14,6 +14,7 @@ use Framework\Renderer\Renderer;
 use Framework\Response\ResponseRedirect;
 use Framework\DI\Service;
 use Framework\Exception\InvalidArgumentException;
+use Framework\Request\Request;
 
 /**
  * Class Controller
@@ -31,8 +32,8 @@ abstract class Controller
      */
     public function render($layout, $data = array())
     {
-        $fullpath = realpath(\Loader::get_path_views() . $layout);
-        $renderer = new Renderer(Service::get('main_layout')); // Try to define renderer like a service. e.g.: Service::get('renderer');
+        $fullpath = realpath(\Loader::get_path_views() . $layout . '.php');
+        $renderer = new Renderer(realpath(Service::get('config')->get('main_layout')));
         $content = $renderer->render($fullpath, $data);
         return new Response($content);
     }
@@ -59,8 +60,8 @@ abstract class Controller
     {
         if(!empty($key))
         {
-            $router = new Router();
-            $url = $router -> buildUrl($key);
+            $router = new Router(Service::get('config')->get('routes'));
+            $url = $router->buildUrl($key);
             return $url;
         }
         else
@@ -69,19 +70,13 @@ abstract class Controller
         }
     }
 
+    /**
+     * Return request class
+     *
+     * @return Request
+     */
     public function getRequest()
     {
-        $request = null;
-        return $this;
-    }
-
-    public function isPost()
-    {
-
-    }
-
-    public function post($param)
-    {
-
+        return new Request();
     }
 }

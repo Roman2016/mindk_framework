@@ -11,6 +11,9 @@
 
 namespace Framework;
 
+use Framework\Exception\BadPathTypeException;
+use Framework\Exception\DatabaseException;
+use Framework\Exception\InvalidTypeException;
 use Framework\Router\Router;
 use Framework\Response\Response;
 use Framework\Response\ResponseRedirect;
@@ -20,6 +23,9 @@ use Framework\Exception\BadResponseTypeException;
 use Framework\Exception\AuthRequredException;
 use Framework\Exception\BadControllerTypeException;
 use Framework\Exception\InvalidArgumentException;
+use Framework\DI\Service;
+use Framework\Model\ActiveRecord;
+
 
 /**
  * Class Application
@@ -28,6 +34,8 @@ use Framework\Exception\InvalidArgumentException;
 class Application
 {
     /**
+     * Array of config parameters
+     *
      * @var array
      */
     public static $config_map = array();
@@ -38,18 +46,23 @@ class Application
      */
     public function __construct($config_path = array())
     {
-        self::$config_map = $config_path;
         //override protection
+        self::$config_map = $config_path;
+        //print_r(self::$config_map);
+        //$mas = include(self::$config_map);
+        //print_r($mas);
+        Service::get('session');
+        ActiveRecord::getDBCon();
     }
 
     /**
-     * Создает класс роутера и вызывает функцию, которая
-     * обрабатывает входящий url адрес
+     * Create Router class and call function that
+     * process URL address
      *
-     * Проверяет, используя рефлексию, наличие нужного класса
-     * контроллера и методов в нем
+     * Check using reflection presence of necessary class
+     * of controller and his methods
      *
-     * Создает соответствующий класс Response
+     * Create Response class
      */
     public function run()
     {
@@ -57,7 +70,13 @@ class Application
 
         $router = new Router(include('../app/config/routes.php'));
 
-        $route = $router -> parseUrl(trim(strip_tags($_SERVER['REQUEST_URI'])));
+        $route = $router->parseUrl(trim(strip_tags($_SERVER['REQUEST_URI'])));
+        //echo '<pre>';
+        //print_r($route);
+        //echo '</pre>';
+        //echo '<pre>';
+        //include(\Framework\Services\ServiceFactory::factory('config')->get('main_layout'));
+        //echo '</pre>';
 
         try
         {
@@ -67,6 +86,9 @@ class Application
                 $action = $route['action'] . 'Action';
                 if($controllerReflection->hasMethod($action))
                 {
+                    //$response = new ResponseRedirect("/signin");
+
+                    // Проверка ролей юзера
                     $controller = $controllerReflection->newInstance();
                     if($controller instanceof Controller)
                     {
@@ -75,6 +97,9 @@ class Application
                         if ($response instanceof Response)
                         {
                             // ...
+                            $response->send();
+                            //include('../src/Blog/views/layout.html.php');
+                            //new ResponseRedirect('/');
                         }
                         else
                         {
@@ -95,7 +120,8 @@ class Application
         catch(HttpNotFoundException $e)
         {
             // Render 404 or just show msg
-            echo $e->getMessage();
+            $error = $e->getMessage();
+            include(Service::get('config')->get('error_404'));
         }
         catch(AuthRequredException $e)
         {
@@ -111,13 +137,26 @@ class Application
         {
             echo $e->getMessage();
         }
+        catch(BadPathTypeException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch(DatabaseException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch(InvalidTypeException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch(BadControllerTypeException $e)
+        {
+            echo $e->getMessage();
+        }
         catch(\Exception $e)
         {
             // Do 500 layout...
-            echo $e->getMessage();
-            //echo '<script>location.replace("_URL_");</script>'; exit;
+            include(Service::get('config')->get('error_500'));
         }
-
-        $response->send();
     }
 }

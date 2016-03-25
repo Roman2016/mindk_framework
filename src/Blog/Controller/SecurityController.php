@@ -26,11 +26,17 @@ class SecurityController extends Controller
         if ($this->getRequest()->isPost()) {
 
             if ($user = User::findByEmail($this->getRequest()->post('email'))) {
-                if ($user->password == $this->getRequest()->post('password')) {
+                if ($user['password'] == $this->getRequest()->post('password', $user['password'])) {
                     Service::get('security')->setUser($user);
+                    if(Service::get('session')->__construct())
+                    {
+                        array_push($errors, "Current session was destroyed, please reconnect");
+                        return $this->render('login.html', array('errors' => $errors));
+                    }
                     $returnUrl = Service::get('session')->returnUrl;
                     unset(Service::get('session')->returnUrl);
-                    return $this->redirect(!is_null($returnUrl)?$returnUrl:$this->generateRoute('home'));
+                    return $this->redirect((!is_null($returnUrl) || $returnUrl == '/web/login')
+                                                      ?$returnUrl:$this->generateRoute('home'));
                 }
             }
 
@@ -51,16 +57,27 @@ class SecurityController extends Controller
         if (Service::get('security')->isAuthenticated()) {
             return new ResponseRedirect($this->generateRoute('home'));
         }
+
         $errors = array();
 
         if ($this->getRequest()->isPost()) {
             try{
-                $user           = new User();
-                $user->email    = $this->getRequest()->post('email');
-                $user->password = $this->getRequest()->post('password');
-                $user->role     = 'ROLE_USER';
-                $user->save();
-                return $this->redirect($this->generateRoute('home'));
+                if ($user_mas = User::findByEmail($this->getRequest()->post('email')))
+                {
+                    array_push($errors, 'This email is already register!');
+                    return $this->render('signin.html', array('errors' => $errors));
+                }
+                else
+                {
+                    $user           = new User();
+                    $user->email    = $this->getRequest()->post('email');
+                    $user->password = $this->getRequest()->post('password');
+                    $user->role     = 'ROLE_USER';
+                    $user->save();
+                    $user_mas = User::findByEmail($this->getRequest()->post('email'));
+                    Service::get('security')->setUser($user_mas);
+                    return $this->redirect($this->generateRoute('home'));
+                }
             } catch(DatabaseException $e){
                 $errors = array($e->getMessage());
             }

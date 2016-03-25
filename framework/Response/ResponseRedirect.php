@@ -13,7 +13,7 @@ use Framework\Exception\InvalidArgumentException;
 class ResponseRedirect extends \Framework\Response\Response
 {
     /**
-     * Параметры переадресации
+     * Redirect URL address
      *
      * @var null
      */
@@ -40,7 +40,7 @@ class ResponseRedirect extends \Framework\Response\Response
     }
 
     /**
-     * Записывает url в массив Header
+     * Add location parameter to html Headers for redirection
      *
      * @param $url
      */
@@ -48,6 +48,6 @@ class ResponseRedirect extends \Framework\Response\Response
     {
         $this->targetUrl = $url;
 
-        $this->setHeader('Location', '/web'.$url);
+        $this->setHeader('Location', $url);
     }
 }

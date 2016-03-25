@@ -15,36 +15,36 @@
 class Loader
 {
     /**
-     * Хранилище для обьекта класса
+     * Repository for class object
      *
      * @var null
      */
     private static $instance = null;
 
     /**
-     * Хранит пути к файлам
+     * Associative array of files paths
      *
      * @var array
      */
     private static $someNamePath = array();
 
     /**
-     * Хранит пространсто имен
+     * Stores namespace
      *
      * @var null
      */
     private static $NameSpace = null;
 
     /**
-     * Хранит полное имя контроллера
+     * Stores name of controller
      *
      * @var null
      */
     private static $ControllerName = null;
 
     /**
-     * Реализовывает паттерн singleton
-     * существует только один обьект класса Loader
+     * Implement pattern singleton
+     * There is only one object of class Loader
      *
      * @return Loader|null
      */
@@ -58,7 +58,7 @@ class Loader
     }
 
     /**
-     * Регистрирует автозагрузчик
+     * Autoloader log
      *
      * Loader constructor.
      */
@@ -69,7 +69,7 @@ class Loader
     }
 
     /**
-     * Защищает обьект от клонирования
+     * Protect object from cloning
      */
     private function __clone()
     {
@@ -77,8 +77,8 @@ class Loader
     }
 
     /**
-     * Записывает полученные пути и пространства имен в
-     * ассоциативный массив
+     * Save received paths and namespaces
+     * in associative array
      *
      * @param $namespace
      * @param $path
@@ -90,18 +90,17 @@ class Loader
     }
 
     /**
-     * Возвращает массив путей к файлам
+     * Return array of files paths
      *
      * @return array
      */
     public static function returnNamespacePath()
     {
-        //print_r (self::$someNamePath);
         return self::$someNamePath;
     }
 
     /**
-     * Формирует полный путь к файлам html
+     * Generates full path to file html
      *
      * @return string
      */
@@ -114,10 +113,10 @@ class Loader
     }
 
     /**
-     * Формирует полный путь к файлам и подключает их
+     * Generates full path to files and connect them
      *
-     * Может существовать только один одноименный подключенный файл
-     * При отсутствии файла ошибки не будет
+     * Exists only one file with the same name
+     * There is no error if file does not exists
      *
      * @param $classname
      * @return void

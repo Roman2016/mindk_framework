@@ -13,7 +13,6 @@ use Framework\Controller\Controller;
 use Framework\DI\Service;
 use Framework\Exception\DatabaseException;
 use Framework\Exception\HttpNotFoundException;
-use Framework\Request\Request;
 use Framework\Response\Response;
 use Framework\Validation\Validator;
 
@@ -22,6 +21,11 @@ class PostController extends Controller
 
     public function indexAction()
     {
+        Service::get('session')->__construct();
+        if(!empty(Service::get('security')->isAuthenticated()))
+        {
+            Service::get('session')->getUrl();
+        }
         return $this->render('index.html', array('posts' => Post::find('all')));
     }
 
@@ -32,8 +36,11 @@ class PostController extends Controller
 
     public function addAction()
     {
+        Service::get('session')->__construct();
+        Service::get('session')->getUrl();
         if ($this->getRequest()->isPost()) {
             try{
+                //echo 'ispost';
                 $post          = new Post();
                 $date          = new \DateTime();
                 $post->title   = $this->getRequest()->post('title');
@@ -42,9 +49,11 @@ class PostController extends Controller
 
                 $validator = new Validator($post);
                 if ($validator->isValid()) {
+                    echo 'ispost';
                     $post->save();
                     return $this->redirect($this->generateRoute('home'), 'The data has been saved successfully');
                 } else {
+                    echo 'ispost error';
                     $error = $validator->getErrors();
                 }
             } catch(DatabaseException $e){

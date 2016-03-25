@@ -27,4 +27,26 @@ class User extends ActiveRecord implements UserInterface
     {
         return $this->role;
     }
+
+    public static function getThisClass()
+    {
+        return __CLASS__;
+    }
+
+    public static function findByEmail($email)
+    {
+        $table = self::getTable();
+        if(!empty($email))
+        {
+            $sql = "SELECT * FROM " . $table . " WHERE email= :email";
+        }
+        else
+        {
+            return null;
+        }
+        $stmt = static::$pdo->prepare($sql);
+        $stmt->execute(array('email' => $email));
+        $result = $stmt->fetch();
+        return $result;
+    }
 }

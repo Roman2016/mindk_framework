@@ -17,12 +17,33 @@ class Post extends ActiveRecord
     public $title;
     public $content;
     public $date;
+    public $id;
 
+    /**
+     * Return current table name
+     *
+     * @return string
+     */
     public static function getTable()
     {
         return 'posts';
     }
 
+    /**
+     * Return name of this class
+     *
+     * @return string
+     */
+    public static function getThisClass()
+    {
+        return __CLASS__;
+    }
+
+    /**
+     * Return array of validation classes
+     *
+     * @return array
+     */
     public function getRules()
     {
         return array(

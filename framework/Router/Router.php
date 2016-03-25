@@ -12,20 +12,20 @@
 namespace Framework\Router;
 
 /**
- * Router.php
+ * Class Router
+ * @package Framework\Router
  */
 class Router
 {
-
     /**
-     * Хранилище для массива routes
+     * Repository for routes array
      *
      * @var array
      */
     protected static $map = array ();
 
     /**
-     * Получает массив с параметрами
+     * Get array of routes
      *
      * Router constructor.
      * @param array $path_routes_map
@@ -33,14 +33,16 @@ class Router
     public function __construct($path_routes_map = array())
     {
         self::$map = $path_routes_map;
-        //echo "<pre>";
+        //echo '<pre>';
         //print_r(self::$map);
+        //echo '</pre>';
     }
 
     /**
-     * Формирует пути к файлу контроллера используя url
-     * Выбирает соответствующий action
-     *     *
+     * Generate path to file using url
+     *
+     * Change current action
+     *
      * @param $url
      * @return $route_found
      */
@@ -50,8 +52,11 @@ class Router
         $string = null; // Additional condition in the choice of regular expression
         $url = str_replace('/web', '', $url); // если проблемы с редиректом
 
-        foreach(self::$map as $route)
+        foreach(self::$map as $key => $route)
         {
+            //echo '<pre>';
+            //print_r($key);
+            //echo '</pre>';
             $pattern = $this -> preparePattern($route, $string = false);
             if(preg_match($pattern, $url, $params))
             {
@@ -61,6 +66,7 @@ class Router
                 array_shift($params); // Get rid of 0 element
                 $route_found = $route;
                 $route_found['params'] = $params;
+                //$route_found['_name'] = $key;
                 break;
             }
         }
@@ -68,7 +74,7 @@ class Router
     }
 
     /**
-     * Формирует нужный url адрес
+     * Generate necessary URL
      *
      * @param $route_name
      * @param array $params
@@ -77,7 +83,6 @@ class Router
     public function buildUrl($route_name, $params = array())
     {
         $url = null;
-
         $url = array_key_exists($route_name, self::$map) ? '/web'.self::$map[$route_name]['pattern'] : '/web/';
         if(!empty($params))
         {
@@ -92,7 +97,7 @@ class Router
     }
 
     /**
-     * Делает замену условия {id} на регулярное выражение
+     * Make replacement condition {id} to regular expression
      *
      * @param $route
      * @return mixed|string
@@ -101,7 +106,7 @@ class Router
     {
         $pattern = null;
 
-        if ($route['_requirements'] && $string == false)
+        if (isset($route['_requirements']) && $string == false)
         {
             foreach($route['_requirements'] as $key => $value)
             {
@@ -115,8 +120,6 @@ class Router
             $pattern = preg_replace('~\{[\w\d_]+\}~Ui','([\w\d_]+)', $route['pattern']);
         }
         $pattern = '~^'.$pattern.'$~';
-        //echo '<pre>';
-        //print_r ($pattern);
         return $pattern;
     }
 }
