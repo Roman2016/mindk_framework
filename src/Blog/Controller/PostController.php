@@ -40,6 +40,7 @@ class PostController extends Controller
         Service::get('session')->getUrl();
         if ($this->getRequest()->isPost()) {
             try{
+                //echo 'ispost';
                 $post          = new Post();
                 $date          = new \DateTime();
                 $post->title   = $this->getRequest()->post('title');
@@ -48,9 +49,11 @@ class PostController extends Controller
 
                 $validator = new Validator($post);
                 if ($validator->isValid()) {
+                    echo 'ispost';
                     $post->save();
                     return $this->redirect($this->generateRoute('home'), 'The data has been saved successfully');
                 } else {
+                    echo 'ispost error';
                     $error = $validator->getErrors();
                 }
             } catch(DatabaseException $e){
