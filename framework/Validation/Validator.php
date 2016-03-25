@@ -58,7 +58,7 @@ class Validator
                 }
             }
         }
-        return !empty($this->error);
+        return empty($this->error);
     }
 
     /**

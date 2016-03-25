@@ -1,4 +1,5 @@
 <?php
+$post = array_shift($post);
 $date = new \DateTime();
 $date->setTimestamp(strtotime($post->date));
 ?>

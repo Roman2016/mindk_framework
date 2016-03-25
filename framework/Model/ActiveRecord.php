@@ -75,6 +75,9 @@ abstract class ActiveRecord
         $stmt = self::$pdo->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(\PDO::FETCH_CLASS, "$class");
+        //echo '<pre>';
+        //print_r($result);
+        //echo '</pre>';
         return $result;
     }
 
