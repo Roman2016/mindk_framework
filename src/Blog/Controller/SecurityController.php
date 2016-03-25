@@ -13,7 +13,6 @@ use Framework\Controller\Controller;
 use Framework\DI\Service;
 use Framework\Exception\DatabaseException;
 use Framework\Response\ResponseRedirect;
-use Framework\Session\Session;
 
 class SecurityController extends Controller
 {
@@ -29,7 +28,11 @@ class SecurityController extends Controller
             if ($user = User::findByEmail($this->getRequest()->post('email'))) {
                 if ($user['password'] == $this->getRequest()->post('password', $user['password'])) {
                     Service::get('security')->setUser($user);
-                    Service::get('session')->control();
+                    if(Service::get('session')->__construct())
+                    {
+                        array_push($errors, "Current session was destroyed, please reconnect");
+                        return $this->render('login.html', array('errors' => $errors));
+                    }
                     $returnUrl = Service::get('session')->returnUrl;
                     unset(Service::get('session')->returnUrl);
                     return $this->redirect((!is_null($returnUrl) || $returnUrl == '/web/login')

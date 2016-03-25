@@ -21,6 +21,11 @@ class PostController extends Controller
 
     public function indexAction()
     {
+        Service::get('session')->__construct();
+        if(!empty(Service::get('security')->isAuthenticated()))
+        {
+            Service::get('session')->getUrl();
+        }
         return $this->render('index.html', array('posts' => Post::find('all')));
     }
 
@@ -31,6 +36,7 @@ class PostController extends Controller
 
     public function addAction()
     {
+        Service::get('session')->__construct();
         Service::get('session')->getUrl();
         if ($this->getRequest()->isPost()) {
             try{

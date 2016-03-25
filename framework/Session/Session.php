@@ -37,68 +37,39 @@ class Session
      */
     public function __construct()
     {
-        //ini_set('display_errors', 1);
-        //error_reporting(E_ALL);
-        setcookie('on','1');
-        if (isset($_SESSION['HTTP_USER_AGENT']))
-        {
-            if (password_verify(($this->fingerprint), $_SESSION['HTTP_USER_AGENT']))
-            {
-                session_unset();
-                session_destroy();
-                $errors = array();
-                array_push($errors, "Current session was destroyed, please reconnect");
-                $controller = new SecurityController();
-                return $controller->render('login.html', array('errors' => $errors));
-            }
-            $this->returnUrl = trim(strip_tags($_SERVER['REQUEST_URI']));
-        }
-        else
-        {
-            session_start();
-            $_SESSION['HTTP_USER_AGENT'] = password_hash(md5($_SESSION['HTTP_USER_AGENT']), PASSWORD_BCRYPT);
-            $this->fingerprint = 'fingerprint' . $_SERVER['HTTP_USER_AGENT'] . session_id();
-            $_SESSION['HTTP_USER_AGENT'] = password_hash(($this->fingerprint), PASSWORD_BCRYPT);
-            $this->returnUrl = trim(strip_tags($_SERVER['REQUEST_URI']));
-        }
-    }
-
-    /**
-     *
-     *
-     * @return \Framework\Response\Response
-     */
-    public function control()
-    {
         if (isset($_SESSION['HTTP_USER_AGENT']))
         {
             if (!password_verify(($this->fingerprint), $_SESSION['HTTP_USER_AGENT']))
             {
                 session_unset();
                 session_destroy();
-                $errors = array();
-                array_push($errors, "Current session was destroyed, please reconnect");
-                $controller = new SecurityController();
-                return $controller->render('login.html', array('errors' => $errors));
+                return true;
+            }
+            if(!empty($_SESSION['lastUrl']) && trim(strip_tags($_SERVER['REQUEST_URI']) == '/web/login'))
+            {
+                $this->returnUrl = $_SESSION['lastUrl'];
+                unset($_SESSION['lastUrl']);
             }
         }
         else
         {
+            //ini_set('display_errors', 1);
+            //error_reporting(E_ALL);
+            setcookie('on','1');
             session_start();
             $_SESSION['HTTP_USER_AGENT'] = password_hash(md5($_SESSION['HTTP_USER_AGENT']), PASSWORD_BCRYPT);
             $this->fingerprint = 'fingerprint' . $_SERVER['HTTP_USER_AGENT'] . session_id();
             $_SESSION['HTTP_USER_AGENT'] = password_hash(($this->fingerprint), PASSWORD_BCRYPT);
-            $this->returnUrl = trim(strip_tags($_SERVER['REQUEST_URI']));
         }
     }
 
     public function getUrl()
     {
-        $this->returnUrl = trim(strip_tags($_SERVER['REQUEST_URI']));
+        $_SESSION['lastUrl'] = trim(strip_tags($_SERVER['REQUEST_URI']));
     }
 
     /**
-     * Set new URL parameter
+     * Set new parameter
      *
      * @param $name
      * @param $val
