@@ -33,8 +33,8 @@ $getErrorBody = function ($field) use ($errors){
             </div>
         <?php } ?>
 
-        <form class="form-horizontal" role="form" method="post" id="post-form" action="<?php //echo $action ?>">
-            <div class="form-group <?php echo 'action'//echo $getValidationClass('title') ?>">
+        <form class="form-horizontal" role="form" method="post" id="post-form" action="<?php echo $action ?>">
+            <div class="form-group <?php echo $getValidationClass('title') ?>">
                 <label class="col-sm-2 control-label">Title</label>
 
                 <div class="col-sm-10">
@@ -110,7 +110,7 @@ $getErrorBody = function ($field) use ($errors){
                     <?php echo $getErrorBody('content')?>
                 </div>
             </div>
-            <?php //$generateToken() ?>
+            <?php //echo 'token'//$generateToken() ?>
 
             <div class="btn-group pull-right">
                 <button type="submit" class="btn btn-success mr-5">Save</button>

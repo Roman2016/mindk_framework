@@ -14,7 +14,6 @@ use Framework\Router\Router;
 use Framework\Exception\HttpNotFoundException;
 use Framework\DI\Service;
 use Blog\Model\User;
-use Framework\Request\Request;
 
 /**
  * Class Renderer
@@ -78,7 +77,6 @@ class Renderer
             $controller = new $controller;
             $method = $action.'Action';
             extract($data);
-            //echo $id;
             return $result = $controller->$method($id);
         };
         $getRoute = function($key)
@@ -97,7 +95,10 @@ class Renderer
         {
             $user = null;
         }
-
+        if(!empty($_SESSION['messages']))
+        {
+            $flush = $_SESSION['messages'];
+        }
         /*
         $generateToken = function()
         {
@@ -119,6 +120,7 @@ class Renderer
         {
             $content = $this->renderMain($content);
         }
+        unset($_SESSION['messages']);
         ob_end_clean();
         //echo '<pre>';
         //print_r($content);

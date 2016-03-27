@@ -95,7 +95,7 @@ class Session
      * @param $type
      * @param $message
      */
-    public function addFlash($type, $message)
+    public function addFlush($type, $message)
     {
         $_SESSION['messages'][$type][] = $message;
     }
