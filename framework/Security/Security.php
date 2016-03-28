@@ -10,6 +10,7 @@ namespace Framework\Security;
 
 use Framework\DI\Service;
 use Framework\Request\Request;
+use Framework\Response\ResponseRedirect;
 
 /**
  * Class Security
@@ -17,6 +18,11 @@ use Framework\Request\Request;
  */
 class Security
 {
+    /**
+     * Value time existence for cookies in seconds
+     */
+    const TimeLiveCookies = 600;
+
     /**
      * User object
      *
@@ -40,19 +46,18 @@ class Security
         $this->object = new $user_class['user_class'];
         if($this->getRequest()->isPost())
         {
-            $this->token = password_hash($_SESSION['email'].'secret_code', PASSWORD_BCRYPT);
-            $_SESSION['token'] = $this->token;
-            setcookie('token', "$this->token", time()+300);
+            $token = $this->getRequest()->post('token');
+            if($token !== $_SESSION['token'] || $token !== $_COOKIE['token'])
+            {
+                Service::get('session')->addFlush('error', 'Careful, token of this page is not correct');
+            }
         }
         if($this->getRequest()->isGet())
         {
-            // С каким значением сравнивать сгенерированный токен?
-            if($_SESSION['token'] || $_COOKIE['token'])
-            {
-
-            }
+            $this->token = password_hash($_SESSION['email'] . 'secret_code', PASSWORD_BCRYPT);
+            setcookie('token', $this->token, time() + self::TimeLiveCookies);
+            $_SESSION['token'] = $this->token;
         }
-
         //override protection
     }
 

@@ -118,6 +118,9 @@ class Validator
                     return $value = filter_var($value, FILTER_SANITIZE_URL);
                 }
                 break;
+            case '':
+                return $value;
+                break;
         }
         return null;
     }

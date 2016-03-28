@@ -43,6 +43,11 @@ abstract class ActiveRecord
         return self::$pdo;
     }
 
+    public static function closeDBCon()
+    {
+        self::$pdo = Service::get('db')->closeDB();
+    }
+
     /**
      * Get the name of table
      *
@@ -75,9 +80,6 @@ abstract class ActiveRecord
         $stmt = self::$pdo->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(\PDO::FETCH_CLASS, "$class");
-        //echo '<pre>';
-        //print_r($result);
-        //echo '</pre>';
         return $result;
     }
 

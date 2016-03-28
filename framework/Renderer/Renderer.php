@@ -35,7 +35,6 @@ class Renderer
     public function __construct($main_template_file)
     {
         $this->main_template = $main_template_file;
-        //echo $this->main_template;
     }
 
     /**
@@ -79,12 +78,18 @@ class Renderer
             extract($data);
             return $result = $controller->$method($id);
         };
+        $generateToken = function()
+        {
+            $token = $_SESSION['token'];
+            echo '<input type="hidden" name="token" value="' . $token . '">';
+        };
         $getRoute = function($key)
         {
             $controller = 'Blog\\Controller\\TestController';
             $controller = new $controller;
             return $controller->generateRoute($key);
         };
+        $action = $getRoute('add_post');
 
         if(Service::get('security')->isAuthenticated())
         {
@@ -99,15 +104,7 @@ class Renderer
         {
             $flush = $_SESSION['messages'];
         }
-        /*
-        $generateToken = function()
-        {
-            $token = '11111111';
-            $token = '<input type="hidden" name="token" value="' . $token . '">';
-            return $token;
-        };
-        */
-        if(file_exists($template_path)) // Проверка на наличие файла по заданному адресу
+        if(file_exists($template_path)) // Is required file exist?
         {
             include($template_path);
         }
@@ -122,9 +119,6 @@ class Renderer
         }
         unset($_SESSION['messages']);
         ob_end_clean();
-        //echo '<pre>';
-        //print_r($content);
-        //echo '</pre>';
         return $content;
     }
 }

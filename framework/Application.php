@@ -68,12 +68,6 @@ class Application
         $router = new Router(include('../app/config/routes.php'));
 
         $route = $router->parseUrl(trim(strip_tags($_SERVER['REQUEST_URI'])));
-        //echo '<pre>';
-        //print_r($route);
-        //echo '</pre>';
-        //echo '<pre>';
-        //include(\Framework\Services\ServiceFactory::factory('config')->get('main_layout'));
-        //echo '</pre>';
 
         try
         {
@@ -100,7 +94,7 @@ class Application
                         if ($response instanceof Response)
                         {
                             $response->send();
-
+                            // Close database connection
                         }
                         else
                         {

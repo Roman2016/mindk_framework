@@ -110,11 +110,11 @@ $getErrorBody = function ($field) use ($errors){
                     <?php echo $getErrorBody('content')?>
                 </div>
             </div>
-            <?php //echo 'token'//$generateToken() ?>
+            <?php $generateToken() ?>
 
             <div class="btn-group pull-right">
                 <button type="submit" class="btn btn-success mr-5">Save</button>
-                <a href="/" class="btn btn-danger">Cancel</a>
+                <a href="/web/" class="btn btn-danger">Cancel</a>
             </div>
         </form>
     </div>
