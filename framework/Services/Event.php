@@ -8,21 +8,25 @@
 
 namespace Framework\Services;
 
+use Framework\Application;
+use Framework\Model\ActiveRecord;
+
 /**
  * Class Event
  * @package Framework\Services
  */
 class Event
 {
-    private $mas_param;
+    private $events = array();
 
     public function __construct()
     {
-        $this->mas_param;
+        $events = include(Application::$config_map);
+        $this->events = $events['events'];
     }
 
     public function trigger($parameter)
     {
-
+        return $this->events[$parameter];
     }
 }

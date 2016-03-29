@@ -45,7 +45,6 @@ class Config
     {
         if(!empty($this->config[$service_name]))
         {
-            //$service = str_replace('__DIR__.\'/../', '', $this->config[$service_name]);
             $service = $this->config[$service_name];
             return $service;
         }

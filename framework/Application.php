@@ -95,6 +95,7 @@ class Application
                         {
                             $response->send();
                             // Close database connection
+                            call_user_func(Service::get('event')->trigger('db_close'));
                         }
                         else
                         {

@@ -74,7 +74,7 @@ class Renderer
         $include = function($controller, $action, $data)
         {
             $controller = new $controller;
-            $method = $action.'Action';
+            $method = $action . 'Action';
             extract($data);
             return $result = $controller->$method($id);
         };

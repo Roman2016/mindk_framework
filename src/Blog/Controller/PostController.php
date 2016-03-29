@@ -36,7 +36,6 @@ class PostController extends Controller
 
     public function addAction()
     {
-        //echo $this->generateRoute('home');
         Service::get('session')->__construct();
         Service::get('session')->getUrl();
         if ($this->getRequest()->isPost()) {
@@ -48,7 +47,6 @@ class PostController extends Controller
                 $post->date    = $date->format('Y-m-d H:i:s');
                 $validator = new Validator($post);
                 if ($validator->isValid()) {
-                    echo $this->generateRoute('home');
                     $post->save();
                     return $this->redirect($this->generateRoute('home'), 'The data has been saved successfully!');
                 } else {

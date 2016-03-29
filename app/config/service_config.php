@@ -19,7 +19,7 @@ return array(
     'db'          => array(
         'db_class'      =>  'Framework\\Services\\DB'
     ),
-    'events'          => array(
-        'events_class'      =>  'Framework\\Services\\Event'
+    'event'       => array(
+        'events_class'  =>  'Framework\\Services\\Event'
     )
 );

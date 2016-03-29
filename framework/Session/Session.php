@@ -37,7 +37,6 @@ class Session
      */
     public function __construct()
     {
-
         if (isset($_SESSION['HTTP_USER_AGENT']))
         {
             if (!password_verify(($this->fingerprint), $_SESSION['HTTP_USER_AGENT']))
@@ -56,7 +55,6 @@ class Session
         {
             //ini_set('display_errors', 1);
             //error_reporting(E_ALL);
-            //setcookie('on','1');
             session_start();
             $_SESSION['HTTP_USER_AGENT'] = password_hash(md5($_SESSION['HTTP_USER_AGENT']), PASSWORD_BCRYPT);
             $this->fingerprint = 'fingerprint' . $_SERVER['HTTP_USER_AGENT'] . session_id();

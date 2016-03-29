@@ -43,6 +43,9 @@ abstract class ActiveRecord
         return self::$pdo;
     }
 
+    /**
+     *
+     */
     public static function closeDBCon()
     {
         self::$pdo = Service::get('db')->closeDB();

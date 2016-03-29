@@ -33,9 +33,6 @@ class Router
     public function __construct($path_routes_map = array())
     {
         self::$map = $path_routes_map;
-        //echo '<pre>';
-        //print_r(self::$map);
-        //echo '</pre>';
     }
 
     /**
@@ -54,9 +51,6 @@ class Router
 
         foreach(self::$map as $key => $route)
         {
-            //echo '<pre>';
-            //print_r($key);
-            //echo '</pre>';
             $pattern = $this -> preparePattern($route, $string = false);
             if(preg_match($pattern, $url, $params))
             {
@@ -66,7 +60,6 @@ class Router
                 array_shift($params); // Get rid of 0 element
                 $route_found = $route;
                 $route_found['params'] = $params;
-                //$route_found['_name'] = $key;
                 break;
             }
         }
@@ -91,7 +84,7 @@ class Router
                 $url = str_replace('{'.$key.'}', $value, $url);
             }
         }
-        // Подчищаем оставшиеся переменные, которые не были заменены
+        // Clean variables that were not replaced
         $url = preg_replace('~\{[\w\d_]*\}~','',$url);
         return $url;
     }

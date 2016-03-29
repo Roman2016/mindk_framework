@@ -67,6 +67,10 @@ abstract class ServiceFactory
                 if(preg_match($regexp, $namespace))
                 {
                     $object = new $path;
+                    if($service_name == 'security')
+                    {
+                        return $object;
+                    }
                     Service::set($service_name, $object);
                     return $object;
                 }
