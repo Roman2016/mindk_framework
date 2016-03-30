@@ -48,4 +48,14 @@ class DB
                      \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC);
         return new \PDO($dsn, $user, $pass, $opt);
     }
+
+    /**
+     * Close database connection
+     *
+     * @return null
+     */
+    public function closeDB()
+    {
+        return null;
+    }
 }

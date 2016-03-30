@@ -48,11 +48,7 @@ class Application
     {
         //override protection
         self::$config_map = $config_path;
-        //print_r(self::$config_map);
-        //$mas = include(self::$config_map);
-        //print_r($mas);
         Service::get('session');
-        ActiveRecord::getDBCon();
     }
 
     /**
@@ -71,12 +67,6 @@ class Application
         $router = new Router(include('../app/config/routes.php'));
 
         $route = $router->parseUrl(trim(strip_tags($_SERVER['REQUEST_URI'])));
-        //echo '<pre>';
-        //print_r($route);
-        //echo '</pre>';
-        //echo '<pre>';
-        //include(\Framework\Services\ServiceFactory::factory('config')->get('main_layout'));
-        //echo '</pre>';
 
         try
         {
@@ -86,20 +76,26 @@ class Application
                 $action = $route['action'] . 'Action';
                 if($controllerReflection->hasMethod($action))
                 {
-                    //$response = new ResponseRedirect("/signin");
-
-                    // Проверка ролей юзера
+                    // Control user role
+                    if($action != 'indexAction' && $action != 'loginAction' && $action != 'signinAction')
+                    {
+                        if($_SESSION['role'] != 'ROLE_USER')
+                        {
+                            throw new AuthRequredException('You must login');
+                        }
+                    }
                     $controller = $controllerReflection->newInstance();
+
                     if($controller instanceof Controller)
                     {
                         $actionReflection = $controllerReflection->getMethod($action);
+                        ActiveRecord::getDBCon();
                         $response = $actionReflection->invokeArgs($controller, $route['params']);
                         if ($response instanceof Response)
                         {
-                            // ...
                             $response->send();
-                            //include('../src/Blog/views/layout.html.php');
-                            //new ResponseRedirect('/');
+                            // Close database connection
+                            call_user_func(Service::get('event')->trigger('db_close'));
                         }
                         else
                         {
@@ -126,7 +122,8 @@ class Application
         catch(AuthRequredException $e)
         {
             // Reroute to login page
-            $response = new ResponseRedirect("/login");
+            Service::get('session')->addFlush('error', $e->getMessage());
+            $response = new ResponseRedirect("/web/login");
             $response->sendHeaders();
         }
         catch(InvalidArgumentException $e)
@@ -138,6 +135,10 @@ class Application
             echo $e->getMessage();
         }
         catch(BadPathTypeException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch(\PDOException $e)
         {
             echo $e->getMessage();
         }

@@ -15,7 +15,7 @@ namespace Framework\Validation\Filter;
 interface ValidationFilterInterface
 {
     /**
-     *
+     * Check, is value correct according to conditions
      *
      * @param $value
      * @return mixed

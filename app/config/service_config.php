@@ -18,5 +18,8 @@ return array(
     ),
     'db'          => array(
         'db_class'      =>  'Framework\\Services\\DB'
+    ),
+    'event'       => array(
+        'events_class'  =>  'Framework\\Services\\Event'
     )
 );

@@ -15,5 +15,6 @@ return array(
         'user_class'    => 'Blog\\Model\\User',
         'login_route'   => 'login'
     ),
-    'service'    => include('service_config.php')
+    'service'    => include('service_config.php'),
+    'events'     => include('events_config.php')
 );

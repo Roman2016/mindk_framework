@@ -14,7 +14,6 @@ use Framework\Router\Router;
 use Framework\Exception\HttpNotFoundException;
 use Framework\DI\Service;
 use Blog\Model\User;
-use Framework\Request\Request;
 
 /**
  * Class Renderer
@@ -36,7 +35,6 @@ class Renderer
     public function __construct($main_template_file)
     {
         $this->main_template = $main_template_file;
-        //echo $this->main_template;
     }
 
     /**
@@ -72,23 +70,30 @@ class Renderer
         extract($data);
 
         ob_start();
-
+        // Call specified method of current controller
         $include = function($controller, $action, $data)
         {
             $controller = new $controller;
-            $method = $action.'Action';
+            $method = $action . 'Action';
             extract($data);
-            //echo $id;
             return $result = $controller->$method($id);
         };
+        // Generate unique token
+        $generateToken = function()
+        {
+            $token = $_SESSION['token'];
+            echo '<input type="hidden" name="token" value="' . $token . '">';
+        };
+        // Get route path
         $getRoute = function($key)
         {
             $controller = 'Blog\\Controller\\TestController';
             $controller = new $controller;
             return $controller->generateRoute($key);
         };
+        $action = $getRoute('add_post');
 
-        if(Service::get('security')->isAuthenticated())
+        if(!empty($_SESSION['email']))
         {
             $user = new User();
             $user->email = $_SESSION['email'];
@@ -97,16 +102,12 @@ class Renderer
         {
             $user = null;
         }
-
-        /*
-        $generateToken = function()
+        if(!empty($_SESSION['messages']))
         {
-            $token = '11111111';
-            $token = '<input type="hidden" name="token" value="' . $token . '">';
-            return $token;
-        };
-        */
-        if(file_exists($template_path)) // Проверка на наличие файла по заданному адресу
+            // Get required messages from session array
+            $flush = $_SESSION['messages'];
+        }
+        if(file_exists($template_path)) // Is required file exist?
         {
             include($template_path);
         }
@@ -119,10 +120,8 @@ class Renderer
         {
             $content = $this->renderMain($content);
         }
+        unset($_SESSION['messages']);
         ob_end_clean();
-        //echo '<pre>';
-        //print_r($content);
-        //echo '</pre>';
         return $content;
     }
 }

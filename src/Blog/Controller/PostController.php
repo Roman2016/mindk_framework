@@ -40,20 +40,16 @@ class PostController extends Controller
         Service::get('session')->getUrl();
         if ($this->getRequest()->isPost()) {
             try{
-                //echo 'ispost';
                 $post          = new Post();
                 $date          = new \DateTime();
                 $post->title   = $this->getRequest()->post('title');
                 $post->content = trim($this->getRequest()->post('content'));
                 $post->date    = $date->format('Y-m-d H:i:s');
-
                 $validator = new Validator($post);
                 if ($validator->isValid()) {
-                    echo 'ispost';
                     $post->save();
-                    return $this->redirect($this->generateRoute('home'), 'The data has been saved successfully');
+                    return $this->redirect($this->generateRoute('home'), 'The data has been saved successfully!');
                 } else {
-                    echo 'ispost error';
                     $error = $validator->getErrors();
                 }
             } catch(DatabaseException $e){

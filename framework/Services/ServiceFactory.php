@@ -50,6 +50,7 @@ abstract class ServiceFactory
     /**
      * Create new object of current service
      * Write values in array of services
+     * Always create new Security object
      *
      * @param $service_name
      * @return mixed
@@ -67,6 +68,10 @@ abstract class ServiceFactory
                 if(preg_match($regexp, $namespace))
                 {
                     $object = new $path;
+                    if($service_name == 'security')
+                    {
+                        return $object;
+                    }
                     Service::set($service_name, $object);
                     return $object;
                 }

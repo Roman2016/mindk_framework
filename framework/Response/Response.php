@@ -82,7 +82,6 @@ class Response
         $this->sendBody();
     }
 
-
     /**
      * Create array for Headers information
      *

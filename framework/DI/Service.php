@@ -54,5 +54,4 @@ class Service
         return empty(self::$services[$service_name]) ? ServiceFactory::factory($service_name)
                                                      : self::$services[$service_name];
     }
-
 }

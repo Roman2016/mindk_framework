@@ -58,7 +58,7 @@ class Validator
                 }
             }
         }
-        return !empty($this->error);
+        return empty($this->error);
     }
 
     /**
@@ -72,7 +72,7 @@ class Validator
     }
 
     /**
-     * Check types of values and filter their
+     * Check values according to filter parameters
      *
      * @param $value
      * @param $filter
@@ -117,6 +117,9 @@ class Validator
                 {
                     return $value = filter_var($value, FILTER_SANITIZE_URL);
                 }
+                break;
+            case '':
+                return $value;
                 break;
         }
         return null;

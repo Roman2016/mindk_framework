@@ -44,9 +44,13 @@ abstract class Controller
      * @param $url
      * @return ResponseRedirect
      */
-    public function redirect($url, $content = false)
+    public function redirect($url, $message = false)
     {
-            return new ResponseRedirect($url, $content = false);
+        if(!empty($message))
+        {
+            Service::get('session')->addFlush('error', $message);
+        }
+        return new ResponseRedirect($url);
     }
 
     /**
