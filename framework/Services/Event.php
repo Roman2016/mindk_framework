@@ -17,14 +17,29 @@ use Framework\Model\ActiveRecord;
  */
 class Event
 {
+    /**
+     * Events array
+     * Events placed in events_config.php
+     *
+     * @var array
+     */
     private $events = array();
 
+    /**
+     * Event constructor.
+     */
     public function __construct()
     {
         $events = include(Application::$config_map);
         $this->events = $events['events'];
     }
 
+    /**
+     * Return request event which corresponds current parameter
+     *
+     * @param $parameter
+     * @return mixed
+     */
     public function trigger($parameter)
     {
         return $this->events[$parameter];

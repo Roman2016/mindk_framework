@@ -33,7 +33,7 @@ class Request
      */
     public function isPost()
     {
-        return ($this->getMethod()=='POST');
+        return ($this->getMethod() == 'POST');
     }
 
     /**
@@ -43,7 +43,7 @@ class Request
      */
     public function isGet()
     {
-        return ($this->getMethod()=='GET');
+        return ($this->getMethod() == 'GET');
     }
 
     /**

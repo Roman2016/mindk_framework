@@ -70,7 +70,7 @@ class Renderer
         extract($data);
 
         ob_start();
-
+        // Call specified method of current controller
         $include = function($controller, $action, $data)
         {
             $controller = new $controller;
@@ -78,11 +78,13 @@ class Renderer
             extract($data);
             return $result = $controller->$method($id);
         };
+        // Generate unique token
         $generateToken = function()
         {
             $token = $_SESSION['token'];
             echo '<input type="hidden" name="token" value="' . $token . '">';
         };
+        // Get route path
         $getRoute = function($key)
         {
             $controller = 'Blog\\Controller\\TestController';
@@ -91,7 +93,7 @@ class Renderer
         };
         $action = $getRoute('add_post');
 
-        if(Service::get('security')->isAuthenticated())
+        if(!empty($_SESSION['email']))
         {
             $user = new User();
             $user->email = $_SESSION['email'];
@@ -102,6 +104,7 @@ class Renderer
         }
         if(!empty($_SESSION['messages']))
         {
+            // Get required messages from session array
             $flush = $_SESSION['messages'];
         }
         if(file_exists($template_path)) // Is required file exist?

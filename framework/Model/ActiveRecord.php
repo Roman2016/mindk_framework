@@ -9,6 +9,7 @@
 namespace Framework\Model;
 
 use Framework\DI\Service;
+use Framework\Exception\DatabaseException;
 
 abstract class ActiveRecord
 {
@@ -44,7 +45,7 @@ abstract class ActiveRecord
     }
 
     /**
-     *
+     * Write empty class of database connection in pdo variable
      */
     public static function closeDBCon()
     {
@@ -131,7 +132,10 @@ abstract class ActiveRecord
             }
         }
         $sql = $sql_query . $sql_data;
-        $stmt = self::$pdo->prepare($sql);
+        if(!$stmt = self::$pdo->prepare($sql))
+        {
+            throw new DatabaseException('Error preparation of request');
+        }
         $stmt->execute($fields);
     }
 

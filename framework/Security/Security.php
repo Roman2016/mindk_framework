@@ -38,6 +38,11 @@ class Security
     private $token = null;
 
     /**
+     * Get User object
+     *
+     * Generate new token value
+     * Control token value of HTML pages
+     *
      * Security constructor.
      */
     public function __construct()

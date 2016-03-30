@@ -47,7 +47,7 @@ class Router
     {
         $route_found = null;
         $string = null; // Additional condition in the choice of regular expression
-        $url = str_replace('/web', '', $url); // если проблемы с редиректом
+        $url = str_replace('/web', '', $url); // for Windows platform
 
         foreach(self::$map as $key => $route)
         {

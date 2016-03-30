@@ -72,7 +72,7 @@ class Validator
     }
 
     /**
-     * Check types of values and filter their
+     * Check values according to filter parameters
      *
      * @param $value
      * @param $filter

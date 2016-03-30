@@ -49,7 +49,6 @@ class Application
         //override protection
         self::$config_map = $config_path;
         Service::get('session');
-        ActiveRecord::getDBCon();
     }
 
     /**
@@ -90,6 +89,7 @@ class Application
                     if($controller instanceof Controller)
                     {
                         $actionReflection = $controllerReflection->getMethod($action);
+                        ActiveRecord::getDBCon();
                         $response = $actionReflection->invokeArgs($controller, $route['params']);
                         if ($response instanceof Response)
                         {
@@ -135,6 +135,10 @@ class Application
             echo $e->getMessage();
         }
         catch(BadPathTypeException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch(\PDOException $e)
         {
             echo $e->getMessage();
         }

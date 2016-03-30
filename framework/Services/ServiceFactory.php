@@ -50,6 +50,7 @@ abstract class ServiceFactory
     /**
      * Create new object of current service
      * Write values in array of services
+     * Always create new Security object
      *
      * @param $service_name
      * @return mixed
