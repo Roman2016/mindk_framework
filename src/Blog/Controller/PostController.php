@@ -65,6 +65,8 @@ class PostController extends Controller
 
     public function showAction($id)
     {
+        Service::get('session')->__construct();
+        Service::get('session')->getUrl();
         if (!$post = Post::find((int)$id)) {
             throw new HttpNotFoundException('Page Not Found!');
         }
