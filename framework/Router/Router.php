@@ -47,7 +47,7 @@ class Router
     {
         $route_found = null;
         $string = null; // Additional condition in the choice of regular expression
-        $url = str_replace('/web', '', $url); // for Windows platform
+        $url = str_replace('/web', '', $url); // for not specified virt-hosts
 
         foreach(self::$map as $key => $route)
         {
@@ -76,7 +76,7 @@ class Router
     public function buildUrl($route_name, $params = array())
     {
         $url = null;
-        $url = array_key_exists($route_name, self::$map) ? '/web'.self::$map[$route_name]['pattern'] : '/web/';
+        $url = array_key_exists($route_name, self::$map) ? self::$map[$route_name]['pattern'] : '/';
         if(!empty($params))
         {
             foreach($params as $key => $value)
