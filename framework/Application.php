@@ -123,7 +123,7 @@ class Application
         {
             // Reroute to login page
             Service::get('session')->addFlush('error', $e->getMessage());
-            $response = new ResponseRedirect("/web/login");
+            $response = new ResponseRedirect("/login");
             $response->sendHeaders();
         }
         catch(InvalidArgumentException $e)
