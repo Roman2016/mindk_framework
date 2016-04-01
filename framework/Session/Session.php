@@ -45,7 +45,7 @@ class Session
                 session_destroy();
                 return true;
             }
-            if(!empty($_SESSION['lastUrl']) && trim(strip_tags($_SERVER['REQUEST_URI']) == '/web/login'))
+            if(!empty($_SESSION['lastUrl']) && trim(strip_tags($_SERVER['REQUEST_URI']) == '/login'))
             {
                 $this->returnUrl = $_SESSION['lastUrl'];
                 unset($_SESSION['lastUrl']);
